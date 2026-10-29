@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hurtownie-warehouse"
+version = "0.1.0"
+description = "Cross-ecosystem package security data warehouse"
+requires-python = ">=3.12"
+dependencies = [
+    "scrapy>=2.13",
+    "selenium>=4.20",
+    "psycopg[binary]>=3.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.setuptools]
+packages = ["warehouse", "warehouse.spiders"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
