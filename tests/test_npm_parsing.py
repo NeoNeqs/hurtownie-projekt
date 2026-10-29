@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 
 from scrapy.http import HtmlResponse
 
+from warehouse.sampling import select_versions
 from warehouse.spiders.npm import (
     Candidate,
     dependencies_url,
@@ -134,6 +136,46 @@ def test_select_sample_is_reproducible_and_disjoint() -> None:
     assert [c.category for c in first[:2]] == ["popular", "popular"]
     assert len({c.name for c in first}) == 4
     assert {c.name for c in first} & {"a"} == {"a"}
+
+
+def version_entry(version: str, day: int) -> dict:
+    return {
+        "version": version,
+        "published_at": datetime(2024, 1, day, tzinfo=timezone.utc),
+    }
+
+
+def test_select_versions_spreads_over_release_history() -> None:
+    entries = [version_entry(f"1.0.{n}", n + 1) for n in range(5)]
+
+    selected = select_versions(entries, limit=3, strategy="spread")
+
+    assert [entry["version"] for entry in selected] == ["1.0.0", "1.0.2", "1.0.4"]
+
+
+def test_select_versions_spread_includes_oldest_and_newest() -> None:
+    entries = [version_entry(f"2.{n}.0", n + 1) for n in range(10)]
+
+    selected = select_versions(entries, limit=4, strategy="spread")
+
+    assert selected[0]["version"] == "2.0.0"
+    assert selected[-1]["version"] == "2.9.0"
+    assert len(selected) == 4
+
+
+def test_select_versions_downloads_strategy_keeps_render_order() -> None:
+    entries = [version_entry("9.0.0", 5), version_entry("1.0.0", 1)]
+
+    selected = select_versions(entries, limit=1, strategy="downloads")
+
+    assert [entry["version"] for entry in selected] == ["9.0.0"]
+
+
+def test_select_versions_returns_everything_when_limit_is_unbounded() -> None:
+    entries = [version_entry(f"1.0.{n}", n + 1) for n in range(4)]
+
+    assert len(select_versions(entries, limit=0, strategy="spread")) == 4
+    assert len(select_versions(entries, limit=4, strategy="spread")) == 4
 
 
 def test_select_sample_never_reuses_popular_package_for_random_group() -> None:

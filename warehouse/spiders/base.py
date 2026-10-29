@@ -56,12 +56,20 @@ class BrowserSpider(Spider):
 
     def errback(self, failure: Any) -> None:
         request = failure.request
-        self.record_error(
-            url=request.url,
-            stage="download",
-            error_type=type(failure.value).__name__,
-            message=str(failure.value),
-        )
+        if request.meta.get("selenium_challenge"):
+            self.record_error(
+                url=request.url,
+                stage="access",
+                error_type="ChallengeBlocked",
+                message="anti-bot challenge was not cleared",
+            )
+        else:
+            self.record_error(
+                url=request.url,
+                stage="download",
+                error_type=type(failure.value).__name__,
+                message=str(failure.value),
+            )
         self.logger.error("Request failed: %s (%s)", request.url, failure.value)
 
     def record_error(

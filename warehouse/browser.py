@@ -29,6 +29,13 @@ CHALLENGE_MARKERS = (
     "checking your browser",
     "verify you are human",
     "attention required",
+    "client challenge",
+)
+
+# Fastly fronts pypi.org and serves this interstitial for uncached pages.
+CHALLENGE_SOURCE_MARKERS = (
+    "cdn-cgi/challenge-platform",
+    "_fs-ch-",
 )
 
 CHALLENGE_FRAME_SELECTORS = (
@@ -121,8 +128,8 @@ class BrowserSession:
             source = (self.driver.page_source or "")[:100_000].lower()
         except WebDriverException:
             return True
-        return any(marker in title for marker in CHALLENGE_MARKERS) or (
-            "cdn-cgi/challenge-platform" in source
+        return any(marker in title for marker in CHALLENGE_MARKERS) or any(
+            marker in source for marker in CHALLENGE_SOURCE_MARKERS
         )
 
     def wait_until_clear(self, timeout: float, poll: float = 0.75) -> bool:

@@ -115,7 +115,7 @@ class SeleniumMiddleware:
         self.stats.inc_value("browser/challenges")
         logger.warning("Anti-bot challenge on %s", request.url)
 
-        if auto_timeout > 0 and session.wait_until_clear(min(auto_timeout, 3.0)):
+        if auto_timeout > 0 and session.wait_until_clear(min(auto_timeout, 6.0)):
             self.stats.inc_value("browser/challenge_passed")
             return True
 
@@ -140,7 +140,7 @@ class SeleniumMiddleware:
         except TimeoutException:
             return False
 
-        if auto_timeout > 0 and session.wait_until_clear(min(auto_timeout, 3.0)):
+        if auto_timeout > 0 and session.wait_until_clear(min(auto_timeout, 6.0)):
             self.stats.inc_value("browser/challenge_passed")
             return True
 

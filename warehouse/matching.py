@@ -104,6 +104,9 @@ def match_ecosystem(conn: Any, ecosystem: str, package: str | None = None) -> di
     for row in ranges:
         by_package.setdefault(row["package_normalized_name"], []).append(row)
 
+    # The reads above opened an implicit transaction, which would turn the block
+    # below into a savepoint and roll the results back when the connection closes.
+    conn.commit()
     with conn.transaction():
         if package:
             conn.execute(

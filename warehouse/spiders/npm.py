@@ -22,6 +22,7 @@ from scrapy import Request
 from scrapy.http import Response
 
 from warehouse.processing import parse_timestamp
+from warehouse.sampling import select_versions
 from warehouse.spiders.base import BrowserSpider
 
 logger = logging.getLogger(__name__)
@@ -264,28 +265,6 @@ def select_sample(
                 break
     chosen.extend(picked)
     return chosen
-
-
-def select_versions(
-    entries: list[dict[str, Any]], limit: int, strategy: str
-) -> list[dict[str, Any]]:
-    if limit <= 0 or len(entries) <= limit:
-        return list(entries)
-    if strategy == "downloads":
-        return entries[:limit]
-    if limit == 1:
-        return [entries[0]]
-
-    # Spread the sample over the release history. Taking only the most
-    # downloaded versions hides exactly the old versions advisories target.
-    dated = sorted(
-        entries,
-        key=lambda entry: entry.get("published_at")
-        or datetime.min.replace(tzinfo=timezone.utc),
-    )
-    step = (len(dated) - 1) / (limit - 1)
-    indices = sorted({round(index * step) for index in range(limit)})
-    return [dated[index] for index in indices]
 
 
 class NpmSpider(BrowserSpider):

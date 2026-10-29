@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Peace of mind from prototype to production">
+    <meta name="sogou_site_verification" content="GrtyJPARqi">
+    <meta name="color-scheme" content="light dark">
+
+    <title data-default="Hex">phoenix | Hex</title>
+
+    <script nonce="7gslwSr_dYSncsdxUn3lYXpfNmPIx4jkgju0KzX2QfA">
+      (() => {
+        const storageKey = "hexpm-theme";
+
+        let storedTheme = null;
+
+        try {
+          storedTheme = window.localStorage.getItem(storageKey);
+        } catch (_error) {}
+
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+
+        const preference = storedTheme === "light" || storedTheme === "dark" ? storedTheme : "system";
+        const theme = preference === "system" ? systemTheme : preference;
+
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.setAttribute("data-theme-preference", preference);
+        document.documentElement.style.colorScheme = theme;
+
+        if (/Windows/.test(navigator.userAgent) && !/Firefox/.test(navigator.userAgent)) {
+          document.documentElement.classList.add("no-flag-emoji");
+        }
+      })();
+    </script>
+
+    <meta content="phoenix" property="og:title"><meta content="website" property="og:type"><meta content="/packages/phoenix" property="og:url"><meta content="https://hex.pm/images/favicon-160-3770bc59f1f8ba7656b4db5a1eacd8e3.png?vsn=d" property="og:image"><meta content="160" property="og:image:width"><meta content="160" property="og:image:height"><meta content="Peace of mind from prototype to production" property="og:description"><meta content="Hex" property="og:site_name">
+    <link href="/packages/phoenix" rel="canonical">
+    <meta content="eUdiI08VCQ5kegF9DCIaPB1HUwwSOgFF0vWi5PXy2JkMEVVulsduKpYr" name="csrf-token">
+
+    <link rel="icon" type="image/svg+xml" href="/images/hex-full-a8183c4f9adac71516516d107d402b18.svg?vsn=d">
+    <link rel="search" type="application/opensearchdescription+xml" title="Hex" href="/hexsearch.xml">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" nonce="SIm8Jn34K9-H8bPqa5vdCzVa_hRmMPorRGSIiSCQzzk">
+    <link phx-track-static rel="stylesheet" href="/assets/app-04b9e527a4fa52ee6f130171730ed3df.css?vsn=d" nonce="SIm8Jn34K9-H8bPqa5vdCzVa_hRmMPorRGSIiSCQzzk">
+    <link rel="alternate" type="application/rss+xml" title="RSS - Blog" href="/feeds/blog.xml">
+
+      <script async defer src="https://s.hex.pm/js/script.js" nonce="7gslwSr_dYSncsdxUn3lYXpfNmPIx4jkgju0KzX2QfA">
+      </script>
+      <script nonce="7gslwSr_dYSncsdxUn3lYXpfNmPIx4jkgju0KzX2QfA">
+        window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init({endpoint:"https://s.hex.pm/api/event",captureOnLocalhost:true})
+      </script>
+
+  </head>
+
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="min-h-dvh flex flex-col">
+  <section class="flex flex-1 flex-col">
+    
+
+    <nav id="main-navbar" class="bg-grey-800 w-full font-sans">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between h-[72px] gap-8 lg:gap-20">
+      <a href="/" class="shrink-0 flex items-center gap-3">
+  <img src="/images/hex-full-a8183c4f9adac71516516d107d402b18.svg?vsn=d" alt="hex logo" class="h-8 w-auto">
+  <span class="text-white text-2xl font-bold tracking-tight">
+    Hex
+  </span>
+</a>
+      <div class="hidden lg:flex items-center flex-1 justify-end gap-10">
+  <div class="min-w-0 flex-1 mr-auto">
+  <div class="max-w-[420px] w-full">
+    <div id="phx-GOMHN4TAKc1vcToC" data-phx-session="SFMyNTY.g2gDaAJhBnQAAAAIdwJpZG0AAAAUcGh4LUdPTUhONFRBS2MxdmNUb0N3B3Nlc3Npb250AAAABG0AAAAJYXV0b2ZvY3VzdwVmYWxzZW0AAAAFbGltaXRhCG0AAAAGc2VhcmNodwNuaWxtAAAAB3ZhcmlhbnRtAAAAA25hdncEdmlld3clRWxpeGlyLkhleHBtV2ViLlNlYXJjaFN1Z2dlc3Rpb25zTGl2ZXcKcGFyZW50X3BpZHcDbmlsdwZyb3V0ZXJ3A25pbHcIcm9vdF9waWR3A25pbHcJcm9vdF92aWV3dyVFbGl4aXIuSGV4cG1XZWIuU2VhcmNoU3VnZ2VzdGlvbnNMaXZldxFsaXZlX3Nlc3Npb25fbmFtZXcDbmlsbgYAx7gdiKEBYgABUYA.1ThUGo6QyOmF_vWQmpwpRJi44AcJ3v691tFp31HztMM" data-phx-static="SFMyNTY.g2gDaAJhBnQAAAADdwJpZG0AAAAUcGh4LUdPTUhONFRBS2MxdmNUb0N3BWZsYXNodAAAAAB3CmFzc2lnbl9uZXdqbgYAx7gdiKEBYgABUYA.8kKoCkIUqQGVClP6ycWtHdL7kMeVaQbNP_AROT90AyA"><form id="nav-search-form" method="get" action="/packages" role="search" class="min-w-0 flex-1" phx-change="suggest" phx-submit="submit" autocomplete="off">
+  <div class="relative flex items-center" phx-click-away="close" phx-hook="SearchInputSync" id="nav-search-wrapper">
+    <div class="absolute left-3 pointer-events-none">
+      <svg aria-hidden="true" class="heroicon heroicon-magnifying-glass text-grey-300" fill="none" height="18" title="magnifying-glass" version="1.1" viewBox="0 0 24 24" width="18"><g title="magnifying-glass"><path d="M21 21L15.8033 15.8033M15.8033 15.8033C17.1605 14.4461 18 12.5711 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C12.5711 18 14.4461 17.1605 15.8033 15.8033Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </div>
+    <input type="search" placeholder="Find packages..." name="search" id="nav-search-input" value="" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="nav-suggest-list" phx-keydown="keydown" phx-debounce="100" phx-hook="SearchShortcut" class="w-full h-[40px] bg-grey-800 border border-grey-600 rounded-lg px-3 pl-10 py-[11px] text-white leading-4 placeholder:text-grey-300 focus:outline-none focus:border-grey-500 focus:shadow-[inset_0px_0px_6px_0px_rgba(255,255,255,0.3)]">
+    <input type="hidden" name="sort" value="recent_downloads">
+    <label class="sr-only" for="nav-search-input">Find packages</label>
+
+    
+  </div>
+</form></div>
+  </div>
+</div>
+  <a href="/packages" class="text-grey-200 text-md hover:text-white transition-colors">
+  Packages
+</a>
+<a href="/pricing" class="text-grey-200 text-md hover:text-white transition-colors">
+  Pricing
+</a>
+<a href="/docs" class="text-grey-200 text-md hover:text-white transition-colors">
+  Docs
+</a>
+  <div class="relative flex items-center ">
+  <button type="button" data-theme-toggle class="inline-flex items-center justify-center text-grey-200 transition-colors hover:text-white cursor-pointer h-5 w-5" aria-label="Change theme" aria-haspopup="true">
+    <span class="sr-only">Change color theme</span>
+    <span data-theme-icon="light">
+      <svg aria-hidden="true" class="heroicon heroicon-sun" fill="none" height="18" title="sun" version="1.1" viewBox="0 0 24 24" width="18"><g title="sun"><path d="M12 3V5.25M18.364 5.63604L16.773 7.22703M21 12H18.75M18.364 18.364L16.773 16.773M12 18.75V21M7.22703 16.773L5.63604 18.364M5.25 12H3M7.22703 7.22703L5.63604 5.63604M15.75 12C15.75 14.0711 14.0711 15.75 12 15.75C9.92893 15.75 8.25 14.0711 8.25 12C8.25 9.92893 9.92893 8.25 12 8.25C14.0711 8.25 15.75 9.92893 15.75 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </span>
+    <span data-theme-icon="dark">
+      <svg aria-hidden="true" class="heroicon heroicon-moon" fill="none" height="18" title="moon" version="1.1" viewBox="0 0 24 24" width="18"><g title="moon"><path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </span>
+    <span data-theme-icon="system">
+      <svg aria-hidden="true" class="heroicon heroicon-computer-desktop" fill="none" height="18" title="computer-desktop" version="1.1" viewBox="0 0 24 24" width="18"><g title="computer-desktop"><path d="M9 17.25V18.2574C9 19.053 8.68393 19.8161 8.12132 20.3787L7.5 21H16.5L15.8787 20.3787C15.3161 19.8161 15 19.053 15 18.2574V17.25M21 5.25V15C21 16.2426 19.9926 17.25 18.75 17.25H5.25C4.00736 17.25 3 16.2426 3 15V5.25M21 5.25C21 4.00736 19.9926 3 18.75 3H5.25C4.00736 3 3 4.00736 3 5.25M21 5.25V12C21 13.2426 19.9926 14.25 18.75 14.25H5.25C4.00736 14.25 3 13.2426 3 12V5.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </span>
+  </button>
+
+  <div data-theme-menu class="hidden absolute right-0 top-full mt-2 w-36 bg-grey-700 border border-grey-600 rounded-lg shadow-lg py-1 z-50">
+    <button type="button" data-theme-choice="light" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-grey-200 hover:bg-grey-600 transition-colors cursor-pointer">
+      <svg aria-hidden="true" class="heroicon heroicon-sun" fill="none" height="16" title="sun" version="1.1" viewBox="0 0 24 24" width="16"><g title="sun"><path d="M12 3V5.25M18.364 5.63604L16.773 7.22703M21 12H18.75M18.364 18.364L16.773 16.773M12 18.75V21M7.22703 16.773L5.63604 18.364M5.25 12H3M7.22703 7.22703L5.63604 5.63604M15.75 12C15.75 14.0711 14.0711 15.75 12 15.75C9.92893 15.75 8.25 14.0711 8.25 12C8.25 9.92893 9.92893 8.25 12 8.25C14.0711 8.25 15.75 9.92893 15.75 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> Light
+    </button>
+    <button type="button" data-theme-choice="dark" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-grey-200 hover:bg-grey-600 transition-colors cursor-pointer">
+      <svg aria-hidden="true" class="heroicon heroicon-moon" fill="none" height="16" title="moon" version="1.1" viewBox="0 0 24 24" width="16"><g title="moon"><path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> Dark
+    </button>
+    <button type="button" data-theme-choice="system" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-grey-200 hover:bg-grey-600 transition-colors cursor-pointer">
+      <svg aria-hidden="true" class="heroicon heroicon-computer-desktop" fill="none" height="16" title="computer-desktop" version="1.1" viewBox="0 0 24 24" width="16"><g title="computer-desktop"><path d="M9 17.25V18.2574C9 19.053 8.68393 19.8161 8.12132 20.3787L7.5 21H16.5L15.8787 20.3787C15.3161 19.8161 15 19.053 15 18.2574V17.25M21 5.25V15C21 16.2426 19.9926 17.25 18.75 17.25H5.25C4.00736 17.25 3 16.2426 3 15V5.25M21 5.25C21 4.00736 19.9926 3 18.75 3H5.25C4.00736 3 3 4.00736 3 5.25M21 5.25V12C21 13.2426 19.9926 14.25 18.75 14.25H5.25C4.00736 14.25 3 13.2426 3 12V5.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> System
+    </button>
+  </div>
+</div>
+  
+<a href="/login" class="inline-flex items-center justify-center whitespace-nowrap bg-grey-400 px-6 py-1 rounded-lg text-white text-md hover:bg-grey-500 hover:scale-105 transition-all duration-200">
+  Log In
+</a>
+</div>
+      <div class="flex lg:hidden items-center gap-6">
+  
+  <div class="relative flex items-center ">
+  <button type="button" data-theme-toggle class="inline-flex items-center justify-center text-grey-200 transition-colors hover:text-white cursor-pointer h-10 w-10" aria-label="Change theme" aria-haspopup="true">
+    <span class="sr-only">Change color theme</span>
+    <span data-theme-icon="light">
+      <svg aria-hidden="true" class="heroicon heroicon-sun" fill="none" height="18" title="sun" version="1.1" viewBox="0 0 24 24" width="18"><g title="sun"><path d="M12 3V5.25M18.364 5.63604L16.773 7.22703M21 12H18.75M18.364 18.364L16.773 16.773M12 18.75V21M7.22703 16.773L5.63604 18.364M5.25 12H3M7.22703 7.22703L5.63604 5.63604M15.75 12C15.75 14.0711 14.0711 15.75 12 15.75C9.92893 15.75 8.25 14.0711 8.25 12C8.25 9.92893 9.92893 8.25 12 8.25C14.0711 8.25 15.75 9.92893 15.75 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </span>
+    <span data-theme-icon="dark">
+      <svg aria-hidden="true" class="heroicon heroicon-moon" fill="none" height="18" title="moon" version="1.1" viewBox="0 0 24 24" width="18"><g title="moon"><path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </span>
+    <span data-theme-icon="system">
+      <svg aria-hidden="true" class="heroicon heroicon-computer-desktop" fill="none" height="18" title="computer-desktop" version="1.1" viewBox="0 0 24 24" width="18"><g title="computer-desktop"><path d="M9 17.25V18.2574C9 19.053 8.68393 19.8161 8.12132 20.3787L7.5 21H16.5L15.8787 20.3787C15.3161 19.8161 15 19.053 15 18.2574V17.25M21 5.25V15C21 16.2426 19.9926 17.25 18.75 17.25H5.25C4.00736 17.25 3 16.2426 3 15V5.25M21 5.25C21 4.00736 19.9926 3 18.75 3H5.25C4.00736 3 3 4.00736 3 5.25M21 5.25V12C21 13.2426 19.9926 14.25 18.75 14.25H5.25C4.00736 14.25 3 13.2426 3 12V5.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+    </span>
+  </button>
+
+  <div data-theme-menu class="hidden absolute right-0 top-full mt-2 w-36 bg-grey-700 border border-grey-600 rounded-lg shadow-lg py-1 z-50">
+    <button type="button" data-theme-choice="light" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-grey-200 hover:bg-grey-600 transition-colors cursor-pointer">
+      <svg aria-hidden="true" class="heroicon heroicon-sun" fill="none" height="16" title="sun" version="1.1" viewBox="0 0 24 24" width="16"><g title="sun"><path d="M12 3V5.25M18.364 5.63604L16.773 7.22703M21 12H18.75M18.364 18.364L16.773 16.773M12 18.75V21M7.22703 16.773L5.63604 18.364M5.25 12H3M7.22703 7.22703L5.63604 5.63604M15.75 12C15.75 14.0711 14.0711 15.75 12 15.75C9.92893 15.75 8.25 14.0711 8.25 12C8.25 9.92893 9.92893 8.25 12 8.25C14.0711 8.25 15.75 9.92893 15.75 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> Light
+    </button>
+    <button type="button" data-theme-choice="dark" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-grey-200 hover:bg-grey-600 transition-colors cursor-pointer">
+      <svg aria-hidden="true" class="heroicon heroicon-moon" fill="none" height="16" title="moon" version="1.1" viewBox="0 0 24 24" width="16"><g title="moon"><path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> Dark
+    </button>
+    <button type="button" data-theme-choice="system" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-grey-200 hover:bg-grey-600 transition-colors cursor-pointer">
+      <svg aria-hidden="true" class="heroicon heroicon-computer-desktop" fill="none" height="16" title="computer-desktop" version="1.1" viewBox="0 0 24 24" width="16"><g title="computer-desktop"><path d="M9 17.25V18.2574C9 19.053 8.68393 19.8161 8.12132 20.3787L7.5 21H16.5L15.8787 20.3787C15.3161 19.8161 15 19.053 15 18.2574V17.25M21 5.25V15C21 16.2426 19.9926 17.25 18.75 17.25H5.25C4.00736 17.25 3 16.2426 3 15V5.25M21 5.25C21 4.00736 19.9926 3 18.75 3H5.25C4.00736 3 3 4.00736 3 5.25M21 5.25V12C21 13.2426 19.9926 14.25 18.75 14.25H5.25C4.00736 14.25 3 13.2426 3 12V5.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> System
+    </button>
+  </div>
+</div>
+  <button type="button" class="text-grey-200 p-0 cursor-pointer " phx-click="[[&quot;toggle&quot;,{&quot;ins&quot;:[[&quot;transition-all&quot;,&quot;ease-out&quot;,&quot;duration-200&quot;,&quot;transform&quot;],[&quot;opacity-0&quot;,&quot;-translate-y-2&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;]],&quot;to&quot;:&quot;#mobile-search-bar&quot;,&quot;outs&quot;:[[&quot;transition-all&quot;,&quot;ease-in&quot;,&quot;duration-150&quot;,&quot;transform&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;],[&quot;opacity-0&quot;,&quot;-translate-y-2&quot;]]}],[&quot;hide&quot;,{&quot;to&quot;:&quot;#navbar-mobile&quot;}],[&quot;show&quot;,{&quot;to&quot;:&quot;#menu-open-icon&quot;}],[&quot;hide&quot;,{&quot;to&quot;:&quot;#menu-close-icon&quot;}],[&quot;focus&quot;,{&quot;to&quot;:&quot;#mobile-search-input&quot;}]]" aria-label="Search" aria-expanded="false" aria-controls="mobile-search-bar">
+  <svg aria-hidden="true" class="heroicon heroicon-magnifying-glass" fill="none" height="18" title="magnifying-glass" version="1.1" viewBox="0 0 24 24" width="18"><g title="magnifying-glass"><path d="M21 21L15.8033 15.8033M15.8033 15.8033C17.1605 14.4461 18 12.5711 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C12.5711 18 14.4461 17.1605 15.8033 15.8033Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+</button>
+  <button type="button" class="bg-grey-700 rounded-lg p-[10px] w-10 h-10 flex items-center justify-center cursor-pointer " phx-click="[[&quot;toggle&quot;,{&quot;ins&quot;:[[&quot;transition-all&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;,&quot;transform&quot;],[&quot;opacity-0&quot;,&quot;-translate-y-2&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;]],&quot;to&quot;:&quot;#navbar-mobile&quot;,&quot;outs&quot;:[[&quot;transition-all&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;,&quot;transform&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;],[&quot;opacity-0&quot;,&quot;-translate-y-2&quot;]]}],[&quot;toggle&quot;,{&quot;to&quot;:&quot;#menu-open-icon&quot;}],[&quot;toggle&quot;,{&quot;to&quot;:&quot;#menu-close-icon&quot;}],[&quot;hide&quot;,{&quot;to&quot;:&quot;#mobile-search-bar&quot;}]]" aria-expanded="false" aria-controls="navbar-mobile">
+  <span class="sr-only">Toggle navigation</span>
+  
+  <span id="menu-open-icon" class="block">
+    <svg aria-hidden="true" class="heroicon heroicon-bars-3 text-grey-200" fill="none" height="20" title="bars-3" version="1.1" viewBox="0 0 24 24" width="20"><g title="bars-3"><path d="M3.75 6.75H20.25M3.75 12H20.25M3.75 17.25H20.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+  </span>
+  
+  <span id="menu-close-icon" class="hidden">
+    <svg aria-hidden="true" class="heroicon heroicon-x-mark text-grey-200" fill="none" height="20" title="x-mark" version="1.1" viewBox="0 0 24 24" width="20"><g title="x-mark"><path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+  </span>
+</button>
+</div>
+    </div>
+
+    <div id="mobile-search-bar" class="hidden lg:hidden! bg-grey-800 pb-4">
+  <div class="flex items-center gap-2">
+    <form id="mobile-search-bar-form" role="search" action="/packages" class="flex-1">
+      <div class="relative">
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+          <svg aria-hidden="true" class="heroicon heroicon-magnifying-glass text-grey-300" fill="none" height="18" title="magnifying-glass" version="1.1" viewBox="0 0 24 24" width="18"><g title="magnifying-glass"><path d="M21 21L15.8033 15.8033M15.8033 15.8033C17.1605 14.4461 18 12.5711 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C12.5711 18 14.4461 17.1605 15.8033 15.8033Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+        </div>
+        <input id="mobile-search-input" name="search" type="search" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Find packages..." class="w-full bg-grey-800 border border-grey-600 rounded-lg px-3 pl-10 py-[11px] text-white text-base font-medium leading-4 placeholder:text-grey-300 focus:outline-none focus:border-grey-500 focus:shadow-[inset_0px_0px_6px_0px_rgba(255,255,255,0.3)]">
+        <input type="hidden" name="sort" value="recent_downloads">
+      </div>
+    </form>
+    <button type="button" phx-click="[[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;],[&quot;opacity-100&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-backdrop&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;],[&quot;opacity-100&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-content&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;overflow-hidden&quot;],&quot;to&quot;:&quot;body&quot;}],[&quot;focus_first&quot;,{&quot;to&quot;:&quot;#search-cheatsheet-content&quot;}]]" aria-label="Search filter cheatsheet" class="flex items-center justify-center w-[43px] self-stretch shrink-0 text-grey-200 hover:text-white border border-grey-600 rounded-lg text-sm font-medium cursor-pointer">
+      ?
+    </button>
+  </div>
+</div>
+    <div id="navbar-mobile" class="hidden lg:hidden! bg-grey-800 pb-6">
+  <div class="flex flex-col">
+    <div class="flex items-center gap-2 pb-4">
+      <form id="mobile-menu-search-form" role="search" action="/packages" class="flex-1">
+        <div class="relative">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <svg aria-hidden="true" class="heroicon heroicon-magnifying-glass text-grey-300" fill="none" height="18" title="magnifying-glass" version="1.1" viewBox="0 0 24 24" width="18"><g title="magnifying-glass"><path d="M21 21L15.8033 15.8033M15.8033 15.8033C17.1605 14.4461 18 12.5711 18 10.5C18 6.35786 14.6421 3 10.5 3C6.35786 3 3 6.35786 3 10.5C3 14.6421 6.35786 18 10.5 18C12.5711 18 14.4461 17.1605 15.8033 15.8033Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+          </div>
+          <input name="search" type="search" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Find packages..." class="w-full bg-grey-800 border border-grey-600 rounded-lg px-3 pl-10 py-[11px] text-white text-base font-medium leading-4 placeholder:text-grey-300 focus:outline-none focus:border-grey-500 focus:shadow-[inset_0px_0px_6px_0px_rgba(255,255,255,0.3)]">
+          <input type="hidden" name="sort" value="recent_downloads">
+        </div>
+      </form>
+      <button type="button" phx-click="[[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;],[&quot;opacity-100&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-backdrop&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;],[&quot;opacity-100&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-content&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-out&quot;,&quot;duration-300&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;overflow-hidden&quot;],&quot;to&quot;:&quot;body&quot;}],[&quot;focus_first&quot;,{&quot;to&quot;:&quot;#search-cheatsheet-content&quot;}]]" aria-label="Search filter cheatsheet" class="flex items-center justify-center w-[43px] self-stretch shrink-0 text-grey-200 hover:text-white border border-grey-600 rounded-lg text-sm font-medium cursor-pointer">
+        ?
+      </button>
+    </div>
+    <a href="/packages" class="text-grey-200 text-md py-2 hover:text-white">
+  Packages
+</a>
+<a href="/pricing" class="text-grey-200 text-md py-2 hover:text-white">
+  Pricing
+</a>
+<a href="/docs" class="text-grey-200 text-md py-2 hover:text-white">
+  Docs
+</a>
+    
+<a href="/login" class="bg-grey-600 px-6 py-[11px] rounded-lg text-white text-md text-center hover:bg-grey-500 mt-2">
+  Log In
+</a>
+  </div>
+</div>
+  </div>
+</nav>
+
+      <div class="sticky top-4 z-50 h-0 pointer-events-none">
+        <div id="flash-container" class="max-w-7xl mx-auto px-4 flex flex-col items-end gap-3 pt-3">
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+
+    <main class="flex flex-1 flex-col bg-slate-100 dark:bg-grey-950">
+      
+<div class="bg-grey-50 dark:bg-grey-950 min-h-screen">
+  
+  <div class="max-w-7xl mx-auto px-4 pt-8 pb-2 lg:pb-6">
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-12">
+      
+      <div class="flex flex-col gap-2">
+        <a href="/packages" class="inline-flex items-center gap-1 text-xs font-medium text-grey-400 dark:text-grey-300 hover:text-purple-600 dark:hover:text-primary-300 transition-colors w-fit">
+          <svg aria-hidden="true" class="heroicon heroicon-arrow-left size-3" fill="none" height="24" title="arrow-left" version="1.1" viewBox="0 0 24 24" width="24"><g title="arrow-left"><path d="M10.5 19.5L3 12M3 12L10.5 4.5M3 12H21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg> Packages
+        </a>
+        <div class="flex min-w-0 flex-wrap items-end gap-4">
+          <h1 class="min-w-0 break-words text-grey-900 dark:text-grey-100 text-2xl font-semibold">
+            <a href="/packages/phoenix" class="text-grey-900 dark:text-grey-100 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+              phoenix
+            </a>
+          </h1>
+          
+            <details class="package-version-picker group relative">
+              <summary class="select-none flex cursor-pointer list-none items-center gap-1.5 rounded-xl border border-grey-300 bg-grey-100 px-3 py-1 text-sm font-medium text-grey-700 transition-colors hover:border-grey-400 hover:bg-grey-200 dark:border-grey-600 dark:bg-grey-800 dark:text-grey-200 dark:hover:border-grey-500 dark:hover:bg-grey-700 [&::-webkit-details-marker]:hidden">
+                <svg aria-hidden="true" class="heroicon heroicon-tag size-3.5 text-grey-500 dark:text-grey-300" fill="none" height="24" title="tag" version="1.1" viewBox="0 0 24 24" width="24"><g title="tag"><path d="M9.56802 3H5.25C4.00736 3 3 4.00736 3 5.25V9.56802C3 10.1648 3.23705 10.7371 3.65901 11.159L13.2401 20.7401C13.9388 21.4388 15.0199 21.6117 15.8465 21.0705C17.9271 19.7084 19.7084 17.9271 21.0705 15.8465C21.6117 15.0199 21.4388 13.9388 20.7401 13.2401L11.159 3.65901C10.7371 3.23705 10.1648 3 9.56802 3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /><path d="M6 6H6.0075V6.0075H6V6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="font-mono">1.8.16</span>
+                <svg aria-hidden="true" class="heroicon heroicon-chevron-down size-3.5 text-grey-500 dark:text-grey-300 transition-transform group-open:rotate-180" fill="none" height="24" title="chevron-down" version="1.1" viewBox="0 0 24 24" width="24"><g title="chevron-down"><path d="M19.5 8.25L12 15.75L4.5 8.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+              </summary>
+
+              <div class="absolute right-0 top-full z-20 mt-2 max-h-80 w-52 max-w-[calc(100vw-2rem)] overflow-y-auto overflow-x-hidden rounded-lg border border-grey-200 bg-white shadow-lg sm:left-0 sm:right-auto sm:w-64 dark:border-grey-700 dark:bg-grey-800">
+                
+                  <a href="/packages/phoenix/1.8.16" class="flex items-center justify-between gap-3 px-3 py-2 bg-grey-100 dark:bg-grey-700/60 text-grey-900 dark:text-white">
+                    <span class="font-mono text-sm">1.8.16</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.15" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.15</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.14" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.14</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.13" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.13</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.12" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.12</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.11" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.11</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.10" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.10</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.0-rc.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.0-rc.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.0-rc.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.0-rc.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.0-rc.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.0-rc.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.0-rc.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.0-rc.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.8.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.8.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.24" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.24</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.23" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.23</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.22" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.22</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.21" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.21</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.20" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.20</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.19" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.19</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.18" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.18</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.17" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.17</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.16" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.16</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.15" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.15</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.14" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.14</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.13" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.13</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.12" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.12</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.11" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.11</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.10" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.10</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.0-rc.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.0-rc.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.0-rc.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.0-rc.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.0-rc.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.0-rc.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.7.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.7.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.17" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.17</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.16" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.16</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.15" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.15</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.14" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.14</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.13" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.13</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.12" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.12</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.11" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.11</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.10" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.10</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.0-rc.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.0-rc.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.6.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.6.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.15" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.15</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.14" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.14</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.13" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.13</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.12" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.12</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.11" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.11</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.10" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.10</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.5.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.5.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.18" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.18</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.17" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.17</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.16" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.16</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.15" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.15</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.14" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.14</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.13" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.13</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.12" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.12</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.11" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.11</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.10" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.10</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.0-rc.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.0-rc.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.0-rc.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.0-rc.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.0-rc.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.0-rc.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.4.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.4.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.0-rc.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.0-rc.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.0-rc.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.0-rc.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.0-rc.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.0-rc.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.3.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.3.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.0-rc.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.0-rc.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.2.0-rc.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.2.0-rc.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.1.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.1.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/1.0.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">1.0.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.17.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.17.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.17.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.17.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.16.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.16.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.16.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.16.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.15.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.15.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.14.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.14.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.13.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.13.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.13.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.13.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.12.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.12.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.11.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.11.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.10.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.10.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.9.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.9.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.8.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.8.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.7.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.7.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.7.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.7.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.7.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.7.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.6.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.6.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.6.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.6.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.6.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.6.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.5.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.5.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.4.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.4.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.4.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.4.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.3.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.3.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.3.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.3.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.11" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.11</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.10" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.10</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.9" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.9</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.8" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.8</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.7" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.7</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.6" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.6</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.5" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.5</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.4" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.4</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.3" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.3</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.2" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.2</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.1" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.1</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.2.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.2.0</span>
+                    
+                  </a>
+                
+                  <a href="/packages/phoenix/0.1.0" class="flex items-center justify-between gap-3 px-3 py-2 text-grey-700 dark:text-grey-200 hover:bg-grey-50 dark:hover:bg-grey-700/40 transition-colors">
+                    <span class="font-mono text-sm">0.1.0</span>
+                    
+                  </a>
+                
+              </div>
+            </details>
+          
+        </div>
+        
+          <p class="text-grey-600 dark:text-grey-300 max-w-[600px]">
+            Peace of mind from prototype to production
+          </p>
+        
+        
+        
+      </div>
+
+      
+      <div class="grid w-full auto-cols-fr grid-flow-col gap-2 lg:mt-6 lg:flex lg:w-auto lg:items-center lg:gap-3">
+        
+          <a href="https://phoenix.hexdocs.pm/" class="bg-grey-100 dark:bg-grey-800 flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-xs font-medium text-grey-800 transition-colors hover:bg-grey-200 dark:text-grey-100 dark:hover:bg-grey-700 sm:gap-2 sm:px-3 sm:text-sm lg:px-4">
+            <svg aria-hidden="true" class="heroicon heroicon-book-open size-4 shrink-0" fill="none" height="24" title="book-open" version="1.1" viewBox="0 0 24 24" width="24"><g title="book-open"><path d="M12 6.04168C10.4077 4.61656 8.30506 3.75 6 3.75C4.94809 3.75 3.93834 3.93046 3 4.26212V18.5121C3.93834 18.1805 4.94809 18 6 18C8.30506 18 10.4077 18.8666 12 20.2917M12 6.04168C13.5923 4.61656 15.6949 3.75 18 3.75C19.0519 3.75 20.0617 3.93046 21 4.26212V18.5121C20.0617 18.1805 19.0519 18 18 18C15.6949 18 13.5923 18.8666 12 20.2917M12 6.04168V20.2917" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span class="truncate">HexDocs</span>
+          </a>
+        
+        <a id="report-package-link" href="/packages/phoenix/report" class="bg-grey-100 dark:bg-grey-800 flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-xs font-medium text-grey-800 transition-colors hover:bg-grey-200 dark:text-grey-100 dark:hover:bg-grey-700 sm:gap-2 sm:px-3 sm:text-sm lg:px-4">
+          <svg aria-hidden="true" class="heroicon heroicon-flag size-4 shrink-0" fill="none" height="24" title="flag" version="1.1" viewBox="0 0 24 24" width="24"><g title="flag"><path d="M3 3V4.5M3 21V15M3 15L5.77009 14.3075C7.85435 13.7864 10.0562 14.0281 11.9778 14.9889L12.0856 15.0428C13.9687 15.9844 16.1224 16.2359 18.1718 15.7537L21.2861 15.0209C21.097 13.2899 21 11.5313 21 9.75C21 7.98343 21.0954 6.23914 21.2814 4.52202L18.1718 5.25369C16.1224 5.73591 13.9687 5.48435 12.0856 4.54278L11.9778 4.48892C10.0562 3.52812 7.85435 3.28641 5.77009 3.80748L3 4.5M3 15V4.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+          <span class="truncate">Report package</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="max-w-7xl mx-auto px-4 pt-4 lg:pt-10 pb-10">
+    <div class="flex flex-col gap-5">
+      
+      <details class="group relative md:hidden">
+        <summary class="package-tabs-mobile-trigger select-none flex cursor-pointer list-none items-center justify-between rounded-xl border border-grey-200 bg-white px-4 py-3 text-left shadow-sm transition-colors hover:border-grey-300 dark:border-grey-700 dark:bg-grey-800 dark:hover:border-grey-600 [&::-webkit-details-marker]:hidden">
+          <div class="flex min-w-0 items-center gap-3">
+            <svg aria-hidden="true" class="heroicon heroicon-document-text size-5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="document-text" version="1.1" viewBox="0 0 24 24" width="24"><g title="document-text"><path d="M19.5 14.25V11.625C19.5 9.76104 17.989 8.25 16.125 8.25H14.625C14.0037 8.25 13.5 7.74632 13.5 7.125V5.625C13.5 3.76104 11.989 2.25 10.125 2.25H8.25M8.25 15H15.75M8.25 18H12M10.5 2.25H5.625C5.00368 2.25 4.5 2.75368 4.5 3.375V20.625C4.5 21.2463 5.00368 21.75 5.625 21.75H18.375C18.9963 21.75 19.5 21.2463 19.5 20.625V11.25C19.5 6.27944 15.4706 2.25 10.5 2.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <div class="min-w-0">
+              <p class="text-[10px] font-medium uppercase tracking-wide text-grey-400 dark:text-grey-300">
+                Current section
+              </p>
+              <p class="truncate text-sm font-semibold text-grey-900 dark:text-grey-100">
+                Documentation
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pl-4 text-grey-500 dark:text-grey-300">
+            <span class="text-xs font-medium">Jump to</span>
+            <svg aria-hidden="true" class="heroicon heroicon-chevron-down size-4 shrink-0 transition-transform group-open:rotate-180" fill="none" height="24" title="chevron-down" version="1.1" viewBox="0 0 24 24" width="24"><g title="chevron-down"><path d="M19.5 8.25L12 15.75L4.5 8.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+          </div>
+        </summary>
+
+        <div class="package-tabs-mobile-menu absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-grey-200 bg-white shadow-lg dark:border-grey-700 dark:bg-grey-800">
+          
+            <a href="/packages/phoenix" class="select-none flex items-center justify-between gap-3 bg-grey-50 px-4 py-3 text-sm font-medium text-grey-900 transition-colors dark:bg-grey-700/60 dark:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-document-text size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="document-text" version="1.1" viewBox="0 0 24 24" width="24"><g title="document-text"><path d="M19.5 14.25V11.625C19.5 9.76104 17.989 8.25 16.125 8.25H14.625C14.0037 8.25 13.5 7.74632 13.5 7.125V5.625C13.5 3.76104 11.989 2.25 10.125 2.25H8.25M8.25 15H15.75M8.25 18H12M10.5 2.25H5.625C5.00368 2.25 4.5 2.75368 4.5 3.375V20.625C4.5 21.2463 5.00368 21.75 5.625 21.75H18.375C18.9963 21.75 19.5 21.2463 19.5 20.625V11.25C19.5 6.27944 15.4706 2.25 10.5 2.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">Documentation</span>
+              </div>
+              
+                <svg aria-hidden="true" class="heroicon heroicon-check size-4 shrink-0 text-primary-default dark:text-white" fill="none" height="24" title="check" version="1.1" viewBox="0 0 24 24" width="24"><g title="check"><path d="M4.5 12.75L10.5 18.75L19.5 5.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+              
+            </a>
+          
+            <a href="/packages/phoenix/1.8.16/changelog" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-document size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="document" version="1.1" viewBox="0 0 24 24" width="24"><g title="document"><path d="M19.5 14.25V11.625C19.5 9.76104 17.989 8.25 16.125 8.25H14.625C14.0037 8.25 13.5 7.74632 13.5 7.125V5.625C13.5 3.76104 11.989 2.25 10.125 2.25H8.25M10.5 2.25H5.625C5.00368 2.25 4.5 2.75368 4.5 3.375V20.625C4.5 21.2463 5.00368 21.75 5.625 21.75H18.375C18.9963 21.75 19.5 21.2463 19.5 20.625V11.25C19.5 6.27944 15.4706 2.25 10.5 2.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate pl-4">Changelog</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/1.8.16/license" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-document size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="document" version="1.1" viewBox="0 0 24 24" width="24"><g title="document"><path d="M19.5 14.25V11.625C19.5 9.76104 17.989 8.25 16.125 8.25H14.625C14.0037 8.25 13.5 7.74632 13.5 7.125V5.625C13.5 3.76104 11.989 2.25 10.125 2.25H8.25M10.5 2.25H5.625C5.00368 2.25 4.5 2.75368 4.5 3.375V20.625C4.5 21.2463 5.00368 21.75 5.625 21.75H18.375C18.9963 21.75 19.5 21.2463 19.5 20.625V11.25C19.5 6.27944 15.4706 2.25 10.5 2.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate pl-4">License</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/versions" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-tag size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="tag" version="1.1" viewBox="0 0 24 24" width="24"><g title="tag"><path d="M9.56802 3H5.25C4.00736 3 3 4.00736 3 5.25V9.56802C3 10.1648 3.23705 10.7371 3.65901 11.159L13.2401 20.7401C13.9388 21.4388 15.0199 21.6117 15.8465 21.0705C17.9271 19.7084 19.7084 17.9271 21.0705 15.8465C21.6117 15.0199 21.4388 13.9388 20.7401 13.2401L11.159 3.65901C10.7371 3.23705 10.1648 3 9.56802 3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /><path d="M6 6H6.0075V6.0075H6V6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">183 Versions</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/dependencies" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-cube size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="cube" version="1.1" viewBox="0 0 24 24" width="24"><g title="cube"><path d="M21 7.5L12 2.25L3 7.5M21 7.5L12 12.75M21 7.5V16.5L12 21.75M3 7.5L12 12.75M3 7.5V16.5L12 21.75M12 12.75V21.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">10 Dependencies</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/dependents" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-puzzle-piece size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="puzzle-piece" version="1.1" viewBox="0 0 24 24" width="24"><g title="puzzle-piece"><path d="M14.25 6.08694C14.25 5.73178 14.4361 5.41076 14.6512 5.1282C14.8721 4.8381 15 4.494 15 4.125C15 3.08947 13.9926 2.25 12.75 2.25C11.5074 2.25 10.5 3.08947 10.5 4.125C10.5 4.494 10.6279 4.8381 10.8488 5.1282C11.064 5.41076 11.25 5.73178 11.25 6.08694V6.08694C11.25 6.44822 10.9542 6.73997 10.593 6.72957C9.18939 6.68914 7.80084 6.58845 6.42989 6.43C6.61626 8.04276 6.72269 9.67987 6.74511 11.3373C6.75007 11.7032 6.45293 12 6.08694 12V12C5.73178 12 5.41076 11.814 5.1282 11.5988C4.8381 11.3779 4.494 11.25 4.125 11.25C3.08947 11.25 2.25 12.2574 2.25 13.5C2.25 14.7426 3.08947 15.75 4.125 15.75C4.494 15.75 4.8381 15.6221 5.1282 15.4012C5.41076 15.186 5.73178 15 6.08694 15V15C6.39613 15 6.64157 15.2608 6.6189 15.5691C6.49306 17.2812 6.27742 18.9682 5.97668 20.6256C7.49458 20.8157 9.03451 20.9348 10.5931 20.9797C10.9542 20.9901 11.2501 20.6983 11.2501 20.337V20.337C11.2501 19.9818 11.0641 19.6608 10.8489 19.3782C10.628 19.0881 10.5001 18.744 10.5001 18.375C10.5001 17.3395 11.5075 16.5 12.7501 16.5C13.9928 16.5 15.0001 17.3395 15.0001 18.375C15.0001 18.744 14.8722 19.0881 14.6513 19.3782C14.4362 19.6608 14.2501 19.9818 14.2501 20.337V20.337C14.2501 20.6699 14.5281 20.9357 14.8605 20.9161C16.6992 20.8081 18.5102 20.5965 20.2876 20.2872C20.5571 18.7389 20.7523 17.1652 20.8696 15.5698C20.8923 15.2611 20.6466 15 20.3371 15V15C19.9819 15 19.6609 15.1861 19.3783 15.4013C19.0882 15.6221 18.7441 15.75 18.3751 15.75C17.3396 15.75 16.5001 14.7427 16.5001 13.5C16.5001 12.2574 17.3396 11.25 18.3751 11.25C18.7441 11.25 19.0882 11.378 19.3783 11.5988C19.6609 11.814 19.9819 12 20.3371 12V12C20.7034 12 21.0008 11.703 20.9959 11.3367C20.9713 9.52413 20.8463 7.73572 20.6261 5.97698C18.7403 6.31916 16.816 6.55115 14.8603 6.66605C14.528 6.68557 14.25 6.41979 14.25 6.08694V6.08694Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">732 Dependants</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/advisories" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-shield-exclamation size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="shield-exclamation" version="1.1" viewBox="0 0 24 24" width="24"><g title="shield-exclamation"><path d="M12 9V12.75M12 2.71426C9.8495 4.75089 6.94563 6.00001 3.75 6.00001C3.69922 6.00001 3.64852 5.9997 3.59789 5.99907C3.2099 7.17918 3 8.44011 3 9.75006C3 15.3416 6.82432 20.0399 12 21.372C17.1757 20.0399 21 15.3416 21 9.75006C21 8.44011 20.7901 7.17918 20.4021 5.99907C20.3515 5.9997 20.3008 6.00001 20.25 6.00001C17.0544 6.00001 14.1505 4.75089 12 2.71426ZM12 15.75H12.0075V15.7575H12V15.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">5 Advisories</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/1.8.16/files" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-code-bracket size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="code-bracket" version="1.1" viewBox="0 0 24 24" width="24"><g title="code-bracket"><path d="M17.25 6.75L22.5 12L17.25 17.25M6.75 17.25L1.5 12L6.75 6.75M14.25 3.75L9.75 20.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">Files</span>
+              </div>
+              
+            </a>
+          
+            <a href="/packages/phoenix/audit-logs" class="select-none flex items-center justify-between gap-3 px-4 py-3 text-sm font-medium text-grey-600 transition-colors hover:bg-grey-50 hover:text-grey-900 dark:text-grey-200 dark:hover:bg-grey-700/60 dark:hover:text-white">
+              <div class="flex min-w-0 items-center gap-3">
+                <svg aria-hidden="true" class="heroicon heroicon-clock size-4.5 shrink-0 text-grey-500 dark:text-grey-300" fill="none" height="24" title="clock" version="1.1" viewBox="0 0 24 24" width="24"><g title="clock"><path d="M12 6V12H16.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                <span class="truncate ">Activity</span>
+              </div>
+              
+            </a>
+          
+        </div>
+      </details>
+
+      <div id="package-tabs" class="hidden items-center border-b border-grey-200 dark:border-grey-700 overflow-x-auto overflow-y-hidden md:flex">
+        
+          <a href="/packages/phoenix" class="flex items-center gap-1 px-[15px] py-3 text-grey-900 dark:text-white font-medium border-b-2 border-primary-default dark:border-white -mb-px whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-document-text size-4.5" fill="none" height="24" title="document-text" version="1.1" viewBox="0 0 24 24" width="24"><g title="document-text"><path d="M19.5 14.25V11.625C19.5 9.76104 17.989 8.25 16.125 8.25H14.625C14.0037 8.25 13.5 7.74632 13.5 7.125V5.625C13.5 3.76104 11.989 2.25 10.125 2.25H8.25M8.25 15H15.75M8.25 18H12M10.5 2.25H5.625C5.00368 2.25 4.5 2.75368 4.5 3.375V20.625C4.5 21.2463 5.00368 21.75 5.625 21.75H18.375C18.9963 21.75 19.5 21.2463 19.5 20.625V11.25C19.5 6.27944 15.4706 2.25 10.5 2.25Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>Documentation</span>
+          </a>
+        
+          <a href="/packages/phoenix/versions" class="flex items-center gap-1 px-[15px] py-3 text-grey-500 dark:text-grey-300 font-medium hover:text-grey-700 dark:hover:text-grey-200 transition-colors whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-tag size-4.5" fill="none" height="24" title="tag" version="1.1" viewBox="0 0 24 24" width="24"><g title="tag"><path d="M9.56802 3H5.25C4.00736 3 3 4.00736 3 5.25V9.56802C3 10.1648 3.23705 10.7371 3.65901 11.159L13.2401 20.7401C13.9388 21.4388 15.0199 21.6117 15.8465 21.0705C17.9271 19.7084 19.7084 17.9271 21.0705 15.8465C21.6117 15.0199 21.4388 13.9388 20.7401 13.2401L11.159 3.65901C10.7371 3.23705 10.1648 3 9.56802 3Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /><path d="M6 6H6.0075V6.0075H6V6Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>183 Versions</span>
+          </a>
+        
+          <a href="/packages/phoenix/dependencies" class="flex items-center gap-1 px-[15px] py-3 text-grey-500 dark:text-grey-300 font-medium hover:text-grey-700 dark:hover:text-grey-200 transition-colors whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-cube size-4.5" fill="none" height="24" title="cube" version="1.1" viewBox="0 0 24 24" width="24"><g title="cube"><path d="M21 7.5L12 2.25L3 7.5M21 7.5L12 12.75M21 7.5V16.5L12 21.75M3 7.5L12 12.75M3 7.5V16.5L12 21.75M12 12.75V21.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>10 Dependencies</span>
+          </a>
+        
+          <a href="/packages/phoenix/dependents" class="flex items-center gap-1 px-[15px] py-3 text-grey-500 dark:text-grey-300 font-medium hover:text-grey-700 dark:hover:text-grey-200 transition-colors whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-puzzle-piece size-4.5" fill="none" height="24" title="puzzle-piece" version="1.1" viewBox="0 0 24 24" width="24"><g title="puzzle-piece"><path d="M14.25 6.08694C14.25 5.73178 14.4361 5.41076 14.6512 5.1282C14.8721 4.8381 15 4.494 15 4.125C15 3.08947 13.9926 2.25 12.75 2.25C11.5074 2.25 10.5 3.08947 10.5 4.125C10.5 4.494 10.6279 4.8381 10.8488 5.1282C11.064 5.41076 11.25 5.73178 11.25 6.08694V6.08694C11.25 6.44822 10.9542 6.73997 10.593 6.72957C9.18939 6.68914 7.80084 6.58845 6.42989 6.43C6.61626 8.04276 6.72269 9.67987 6.74511 11.3373C6.75007 11.7032 6.45293 12 6.08694 12V12C5.73178 12 5.41076 11.814 5.1282 11.5988C4.8381 11.3779 4.494 11.25 4.125 11.25C3.08947 11.25 2.25 12.2574 2.25 13.5C2.25 14.7426 3.08947 15.75 4.125 15.75C4.494 15.75 4.8381 15.6221 5.1282 15.4012C5.41076 15.186 5.73178 15 6.08694 15V15C6.39613 15 6.64157 15.2608 6.6189 15.5691C6.49306 17.2812 6.27742 18.9682 5.97668 20.6256C7.49458 20.8157 9.03451 20.9348 10.5931 20.9797C10.9542 20.9901 11.2501 20.6983 11.2501 20.337V20.337C11.2501 19.9818 11.0641 19.6608 10.8489 19.3782C10.628 19.0881 10.5001 18.744 10.5001 18.375C10.5001 17.3395 11.5075 16.5 12.7501 16.5C13.9928 16.5 15.0001 17.3395 15.0001 18.375C15.0001 18.744 14.8722 19.0881 14.6513 19.3782C14.4362 19.6608 14.2501 19.9818 14.2501 20.337V20.337C14.2501 20.6699 14.5281 20.9357 14.8605 20.9161C16.6992 20.8081 18.5102 20.5965 20.2876 20.2872C20.5571 18.7389 20.7523 17.1652 20.8696 15.5698C20.8923 15.2611 20.6466 15 20.3371 15V15C19.9819 15 19.6609 15.1861 19.3783 15.4013C19.0882 15.6221 18.7441 15.75 18.3751 15.75C17.3396 15.75 16.5001 14.7427 16.5001 13.5C16.5001 12.2574 17.3396 11.25 18.3751 11.25C18.7441 11.25 19.0882 11.378 19.3783 11.5988C19.6609 11.814 19.9819 12 20.3371 12V12C20.7034 12 21.0008 11.703 20.9959 11.3367C20.9713 9.52413 20.8463 7.73572 20.6261 5.97698C18.7403 6.31916 16.816 6.55115 14.8603 6.66605C14.528 6.68557 14.25 6.41979 14.25 6.08694V6.08694Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>732 Dependants</span>
+          </a>
+        
+          <a href="/packages/phoenix/advisories" class="flex items-center gap-1 px-[15px] py-3 text-grey-500 dark:text-grey-300 font-medium hover:text-grey-700 dark:hover:text-grey-200 transition-colors whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-shield-exclamation size-4.5" fill="none" height="24" title="shield-exclamation" version="1.1" viewBox="0 0 24 24" width="24"><g title="shield-exclamation"><path d="M12 9V12.75M12 2.71426C9.8495 4.75089 6.94563 6.00001 3.75 6.00001C3.69922 6.00001 3.64852 5.9997 3.59789 5.99907C3.2099 7.17918 3 8.44011 3 9.75006C3 15.3416 6.82432 20.0399 12 21.372C17.1757 20.0399 21 15.3416 21 9.75006C21 8.44011 20.7901 7.17918 20.4021 5.99907C20.3515 5.9997 20.3008 6.00001 20.25 6.00001C17.0544 6.00001 14.1505 4.75089 12 2.71426ZM12 15.75H12.0075V15.7575H12V15.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>5 Advisories</span>
+          </a>
+        
+          <a href="/packages/phoenix/1.8.16/files" class="flex items-center gap-1 px-[15px] py-3 text-grey-500 dark:text-grey-300 font-medium hover:text-grey-700 dark:hover:text-grey-200 transition-colors whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-code-bracket size-4.5" fill="none" height="24" title="code-bracket" version="1.1" viewBox="0 0 24 24" width="24"><g title="code-bracket"><path d="M17.25 6.75L22.5 12L17.25 17.25M6.75 17.25L1.5 12L6.75 6.75M14.25 3.75L9.75 20.25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>Files</span>
+          </a>
+        
+          <a href="/packages/phoenix/audit-logs" class="flex items-center gap-1 px-[15px] py-3 text-grey-500 dark:text-grey-300 font-medium hover:text-grey-700 dark:hover:text-grey-200 transition-colors whitespace-nowrap">
+            <svg aria-hidden="true" class="heroicon heroicon-clock size-4.5" fill="none" height="24" title="clock" version="1.1" viewBox="0 0 24 24" width="24"><g title="clock"><path d="M12 6V12H16.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+            <span>Activity</span>
+          </a>
+        
+      </div>
+
+      
+
+      <div class="flex flex-col lg:flex-row gap-5">
+        
+        <div class="flex-1 min-w-0">
+          
+          <div class="pt-1">
+            
+    <div class="bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-lg">
+
+        <nav aria-label="Documentation files" class="hidden md:flex flex-wrap items-center gap-1 border-b border-grey-200 dark:border-grey-700 px-4 py-2">
+
+            <a href="/packages/phoenix/1.8.16" aria-current="page" class="rounded px-2.5 py-1 text-sm font-medium transition-colors bg-grey-50 dark:bg-grey-700/60 text-grey-900 dark:text-white">
+              Readme
+            </a>
+
+            <a href="/packages/phoenix/1.8.16/changelog" class="rounded px-2.5 py-1 text-sm font-medium transition-colors text-grey-500 dark:text-grey-300 hover:text-grey-700 dark:hover:text-grey-200">
+              Changelog
+            </a>
+
+            <a href="/packages/phoenix/1.8.16/license" class="rounded px-2.5 py-1 text-sm font-medium transition-colors text-grey-500 dark:text-grey-300 hover:text-grey-700 dark:hover:text-grey-200">
+              License
+            </a>
+
+
+            <p class="ml-auto pl-2 text-[10px] font-mono uppercase tracking-wide text-grey-400 dark:text-grey-300 truncate">
+              From README.md
+            </p>
+
+        </nav>
+
+      <div class="p-6">
+        <div id="readme-loading" class="flex items-center justify-center py-12 text-grey-400 dark:text-grey-300">
+  <svg class="animate-spin h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+    </circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+    </path>
+  </svg>
+  Loading README...
+</div>
+
+<div id="readme-fallback" class="text-grey-600 dark:text-grey-300 mb-8 leading-relaxed hidden">
+  <p>Peace of mind from prototype to production</p>
+
+</div>
+
+<iframe id="readme-frame" src="https://readme.hex.pm/phoenix/1.8.16" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" loading="lazy" referrerpolicy="no-referrer" title="README for phoenix" class="w-full border-0 opacity-0 h-0 overflow-hidden"></iframe>
+      </div>
+    </div>
+  
+          </div>
+        </div>
+
+        
+        <div class="w-full lg:w-[373px] shrink-0 flex flex-col gap-6">
+          
+          
+            <div class="bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-lg p-5">
+              <h3 class="text-grey-700 dark:text-grey-100 text-lg font-semibold mb-4">
+                Checksum
+              </h3>
+              <div class="flex border border-grey-200 dark:border-grey-700 rounded overflow-hidden">
+                <input type="text" class="flex-1 min-w-0 px-3 py-2.5 text-grey-400 dark:text-grey-300 text-xs font-mono bg-white dark:bg-grey-800 border-none outline-none" value="e7355c35889305bc539eb09dae2393abcbaf0f65f6874a3f0dcb5f0ec53737fe" readonly onfocus="this.select();" id="checksum-snippet" data-value="e7355c35889305bc539eb09dae2393abcbaf0f65f6874a3f0dcb5f0ec53737fe">
+                <button type="button" phx-hook="CopyButton" id="checksum-copy-btn" data-copy-target="checksum-snippet" class="bg-grey-50 dark:bg-grey-900 border-l border-grey-200 dark:border-grey-700 size-9 flex items-center justify-center hover:bg-grey-100 dark:hover:bg-grey-700 transition-colors shrink-0">
+                  <svg aria-hidden="true" class="heroicon heroicon-square-2-stack size-4" fill="none" height="24" title="square-2-stack" version="1.1" viewBox="0 0 24 24" width="24"><g title="square-2-stack"><path d="M16.5 8.25V6C16.5 4.75736 15.4926 3.75 14.25 3.75H6C4.75736 3.75 3.75 4.75736 3.75 6V14.25C3.75 15.4926 4.75736 16.5 6 16.5H8.25M16.5 8.25H18C19.2426 8.25 20.25 9.25736 20.25 10.5V18C20.25 19.2426 19.2426 20.25 18 20.25H10.5C9.25736 20.25 8.25 19.2426 8.25 18V16.5M16.5 8.25H10.5C9.25736 8.25 8.25 9.25736 8.25 10.5V16.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                </button>
+              </div>
+            </div>
+
+            
+            <div class="bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-lg p-5">
+              <h3 class="text-grey-700 dark:text-grey-100 text-lg font-semibold mb-4">
+                Dependency Config
+              </h3>
+              
+                <div class="mb-4 last:mb-0">
+                  <p class="text-grey-400 dark:text-grey-300 text-xs font-medium mb-1.5">
+                    mix.exs
+                  </p>
+                  <div class="flex border border-grey-200 dark:border-grey-700 rounded overflow-hidden">
+                    <input type="text" class="flex-1 min-w-0 px-3 py-2.5 text-grey-400 dark:text-grey-300 text-xs font-mono bg-white dark:bg-grey-800 border-none outline-none" value="{:phoenix, &quot;~&gt; 1.8&quot;}" readonly onfocus="this.select();" id="mix-snippet" data-value="{:phoenix, &quot;~&gt; 1.8&quot;}">
+                    <button type="button" phx-hook="CopyButton" id="mix-copy-btn" data-copy-target="mix-snippet" class="bg-grey-50 dark:bg-grey-900 border-l border-grey-200 dark:border-grey-700 size-9 flex items-center justify-center hover:bg-grey-100 dark:hover:bg-grey-700 transition-colors shrink-0">
+                      <svg aria-hidden="true" class="heroicon heroicon-square-2-stack size-4" fill="none" height="24" title="square-2-stack" version="1.1" viewBox="0 0 24 24" width="24"><g title="square-2-stack"><path d="M16.5 8.25V6C16.5 4.75736 15.4926 3.75 14.25 3.75H6C4.75736 3.75 3.75 4.75736 3.75 6V14.25C3.75 15.4926 4.75736 16.5 6 16.5H8.25M16.5 8.25H18C19.2426 8.25 20.25 9.25736 20.25 10.5V18C20.25 19.2426 19.2426 20.25 18 20.25H10.5C9.25736 20.25 8.25 19.2426 8.25 18V16.5M16.5 8.25H10.5C9.25736 8.25 8.25 9.25736 8.25 10.5V16.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                    </button>
+                  </div>
+                </div>
+              
+                <div class="mb-4 last:mb-0">
+                  <p class="text-grey-400 dark:text-grey-300 text-xs font-medium mb-1.5">
+                    rebar.config
+                  </p>
+                  <div class="flex border border-grey-200 dark:border-grey-700 rounded overflow-hidden">
+                    <input type="text" class="flex-1 min-w-0 px-3 py-2.5 text-grey-400 dark:text-grey-300 text-xs font-mono bg-white dark:bg-grey-800 border-none outline-none" value="{phoenix, &quot;1.8.16&quot;}" readonly onfocus="this.select();" id="rebar-snippet" data-value="{phoenix, &quot;1.8.16&quot;}">
+                    <button type="button" phx-hook="CopyButton" id="rebar-copy-btn" data-copy-target="rebar-snippet" class="bg-grey-50 dark:bg-grey-900 border-l border-grey-200 dark:border-grey-700 size-9 flex items-center justify-center hover:bg-grey-100 dark:hover:bg-grey-700 transition-colors shrink-0">
+                      <svg aria-hidden="true" class="heroicon heroicon-square-2-stack size-4" fill="none" height="24" title="square-2-stack" version="1.1" viewBox="0 0 24 24" width="24"><g title="square-2-stack"><path d="M16.5 8.25V6C16.5 4.75736 15.4926 3.75 14.25 3.75H6C4.75736 3.75 3.75 4.75736 3.75 6V14.25C3.75 15.4926 4.75736 16.5 6 16.5H8.25M16.5 8.25H18C19.2426 8.25 20.25 9.25736 20.25 10.5V18C20.25 19.2426 19.2426 20.25 18 20.25H10.5C9.25736 20.25 8.25 19.2426 8.25 18V16.5M16.5 8.25H10.5C9.25736 8.25 8.25 9.25736 8.25 10.5V16.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                    </button>
+                  </div>
+                </div>
+              
+                <div class="mb-4 last:mb-0">
+                  <p class="text-grey-400 dark:text-grey-300 text-xs font-medium mb-1.5">
+                    Gleam
+                  </p>
+                  <div class="flex border border-grey-200 dark:border-grey-700 rounded overflow-hidden">
+                    <input type="text" class="flex-1 min-w-0 px-3 py-2.5 text-grey-400 dark:text-grey-300 text-xs font-mono bg-white dark:bg-grey-800 border-none outline-none" value="gleam add phoenix@1.8.16" readonly onfocus="this.select();" id="gleam-snippet" data-value="gleam add phoenix@1.8.16">
+                    <button type="button" phx-hook="CopyButton" id="gleam-copy-btn" data-copy-target="gleam-snippet" class="bg-grey-50 dark:bg-grey-900 border-l border-grey-200 dark:border-grey-700 size-9 flex items-center justify-center hover:bg-grey-100 dark:hover:bg-grey-700 transition-colors shrink-0">
+                      <svg aria-hidden="true" class="heroicon heroicon-square-2-stack size-4" fill="none" height="24" title="square-2-stack" version="1.1" viewBox="0 0 24 24" width="24"><g title="square-2-stack"><path d="M16.5 8.25V6C16.5 4.75736 15.4926 3.75 14.25 3.75H6C4.75736 3.75 3.75 4.75736 3.75 6V14.25C3.75 15.4926 4.75736 16.5 6 16.5H8.25M16.5 8.25H18C19.2426 8.25 20.25 9.25736 20.25 10.5V18C20.25 19.2426 19.2426 20.25 18 20.25H10.5C9.25736 20.25 8.25 19.2426 8.25 18V16.5M16.5 8.25H10.5C9.25736 8.25 8.25 9.25736 8.25 10.5V16.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                    </button>
+                  </div>
+                </div>
+              
+                <div class="mb-4 last:mb-0">
+                  <p class="text-grey-400 dark:text-grey-300 text-xs font-medium mb-1.5">
+                    erlang.mk
+                  </p>
+                  <div class="flex border border-grey-200 dark:border-grey-700 rounded overflow-hidden">
+                    <input type="text" class="flex-1 min-w-0 px-3 py-2.5 text-grey-400 dark:text-grey-300 text-xs font-mono bg-white dark:bg-grey-800 border-none outline-none" value="dep_phoenix = hex 1.8.16" readonly onfocus="this.select();" id="erlang_mk-snippet" data-value="dep_phoenix = hex 1.8.16">
+                    <button type="button" phx-hook="CopyButton" id="erlang_mk-copy-btn" data-copy-target="erlang_mk-snippet" class="bg-grey-50 dark:bg-grey-900 border-l border-grey-200 dark:border-grey-700 size-9 flex items-center justify-center hover:bg-grey-100 dark:hover:bg-grey-700 transition-colors shrink-0">
+                      <svg aria-hidden="true" class="heroicon heroicon-square-2-stack size-4" fill="none" height="24" title="square-2-stack" version="1.1" viewBox="0 0 24 24" width="24"><g title="square-2-stack"><path d="M16.5 8.25V6C16.5 4.75736 15.4926 3.75 14.25 3.75H6C4.75736 3.75 3.75 4.75736 3.75 6V14.25C3.75 15.4926 4.75736 16.5 6 16.5H8.25M16.5 8.25H18C19.2426 8.25 20.25 9.25736 20.25 10.5V18C20.25 19.2426 19.2426 20.25 18 20.25H10.5C9.25736 20.25 8.25 19.2426 8.25 18V16.5M16.5 8.25H10.5C9.25736 8.25 8.25 9.25736 8.25 10.5V16.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+                    </button>
+                  </div>
+                </div>
+              
+            </div>
+
+            
+            <div class="bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-lg p-5">
+              <h3 class="text-grey-700 dark:text-grey-100 text-lg font-semibold mb-4">
+                Package Details
+              </h3>
+
+              
+              
+                <div class="mb-5">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] text-grey-400 dark:text-grey-300 font-medium uppercase tracking-wide">
+                      Downloads
+                    </span>
+                    <span class="text-[10px] text-grey-400 dark:text-grey-300">
+                      Last 30 days,
+                      
+                        all versions
+                      
+                    </span>
+                  </div>
+                  <svg viewBox="0 -3 880 213" class="w-full h-auto" role="img" aria-label="Downloads over the last 30 days">
+  <defs>
+    <linearGradient id="pkg-chart-2-line" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="800" y2="0">
+      <stop offset="0%" stop-color="#7c3aed"></stop>
+      <stop offset="100%" stop-color="#a855f7"></stop>
+    </linearGradient>
+    <linearGradient id="pkg-chart-2-fill" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="200">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.12"></stop>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.01"></stop>
+    </linearGradient>
+  </defs>
+  
+  
+  
+    <text x="72" y="194" text-anchor="end" fill="#9ca3af" font-size="22" font-family="ui-monospace, SFMono-Regular, monospace">
+      0
+    </text>
+  
+    <text x="72" y="154" text-anchor="end" fill="#9ca3af" font-size="22" font-family="ui-monospace, SFMono-Regular, monospace">
+      50K
+    </text>
+  
+    <text x="72" y="114" text-anchor="end" fill="#9ca3af" font-size="22" font-family="ui-monospace, SFMono-Regular, monospace">
+      100K
+    </text>
+  
+    <text x="72" y="74" text-anchor="end" fill="#9ca3af" font-size="22" font-family="ui-monospace, SFMono-Regular, monospace">
+      150K
+    </text>
+  
+    <text x="72" y="34" text-anchor="end" fill="#9ca3af" font-size="22" font-family="ui-monospace, SFMono-Regular, monospace">
+      200K
+    </text>
+  
+  
+  <g transform="translate(80, 0)">
+    
+    
+      <line x1="0" y1="38" x2="800" y2="38" stroke="#f3f4f6" stroke-width="1"></line>
+    
+      <line x1="0" y1="78" x2="800" y2="78" stroke="#f3f4f6" stroke-width="1"></line>
+    
+      <line x1="0" y1="118" x2="800" y2="118" stroke="#f3f4f6" stroke-width="1"></line>
+    
+      <line x1="0" y1="158" x2="800" y2="158" stroke="#f3f4f6" stroke-width="1"></line>
+    
+      <line x1="0" y1="198" x2="800" y2="198" stroke="#f3f4f6" stroke-width="1"></line>
+    
+    
+    <path fill="url(#pkg-chart-2-fill)" d="M0.0,122.024C5.16,122.57 15.49,122.42 25.81,124.737C36.13,127.05 41.3,132.55 51.62,133.612C61.94,134.67 67.11,129.37 77.42999999999999,130.048C87.75,130.72 92.92,129.6 103.24,136.987C113.56,144.38 118.73,161.56 129.04999999999998,167.005C139.37,172.45 144.54,173.27 154.85999999999999,164.191C165.18,155.11 170.35,131.57 180.67,121.621C190.99,111.67 196.16,113.56 206.48,114.426C216.8,115.29 221.97,123.25 232.29,125.934C242.61,128.62 247.78,125.66 258.09999999999997,127.847C268.42,130.04 273.59,129.85 283.90999999999997,136.88400000000001C294.23,143.92 299.4,158.76 309.71999999999997,163.036C320.04,167.31 325.21,165.28 335.53,158.257C345.85,151.24 351.02,136.08 361.34,127.942C371.66,119.81 376.83,120.08 387.15,117.59C397.47,115.1 402.64,116.8 412.96,115.494C423.28,114.19 428.45,108.66 438.77,111.062C449.09,113.47 454.26,119.46 464.58,127.516C474.9,135.58 480.07,148.37 490.39,151.361C500.71,154.36 505.88,148.44 516.1999999999999,142.494C526.52,136.55 531.69,127.38 542.01,121.646C552.33,115.91 557.5,113.99 567.8199999999999,113.818C578.14,113.64 583.31,122.04 593.63,120.776C603.95,119.51 609.12,107.07 619.4399999999999,107.475C629.76,107.88 634.93,112.57 645.25,122.81C655.57,133.05 660.74,151.62 671.06,158.677C681.38,165.73 686.55,168.56 696.87,158.088C707.19,147.62 712.36,113.99 722.68,106.314C733.0,98.64 738.17,121.63 748.49,119.702C758.81,117.77 769.14,101.28 774.3,96.676L774.3,200L0,200Z"></path>
+    
+    <path fill="none" stroke="url(#pkg-chart-2-line)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M0.0,122.024C5.16,122.57 15.49,122.42 25.81,124.737C36.13,127.05 41.3,132.55 51.62,133.612C61.94,134.67 67.11,129.37 77.42999999999999,130.048C87.75,130.72 92.92,129.6 103.24,136.987C113.56,144.38 118.73,161.56 129.04999999999998,167.005C139.37,172.45 144.54,173.27 154.85999999999999,164.191C165.18,155.11 170.35,131.57 180.67,121.621C190.99,111.67 196.16,113.56 206.48,114.426C216.8,115.29 221.97,123.25 232.29,125.934C242.61,128.62 247.78,125.66 258.09999999999997,127.847C268.42,130.04 273.59,129.85 283.90999999999997,136.88400000000001C294.23,143.92 299.4,158.76 309.71999999999997,163.036C320.04,167.31 325.21,165.28 335.53,158.257C345.85,151.24 351.02,136.08 361.34,127.942C371.66,119.81 376.83,120.08 387.15,117.59C397.47,115.1 402.64,116.8 412.96,115.494C423.28,114.19 428.45,108.66 438.77,111.062C449.09,113.47 454.26,119.46 464.58,127.516C474.9,135.58 480.07,148.37 490.39,151.361C500.71,154.36 505.88,148.44 516.1999999999999,142.494C526.52,136.55 531.69,127.38 542.01,121.646C552.33,115.91 557.5,113.99 567.8199999999999,113.818C578.14,113.64 583.31,122.04 593.63,120.776C603.95,119.51 609.12,107.07 619.4399999999999,107.475C629.76,107.88 634.93,112.57 645.25,122.81C655.57,133.05 660.74,151.62 671.06,158.677C681.38,165.73 686.55,168.56 696.87,158.088C707.19,147.62 712.36,113.99 722.68,106.314C733.0,98.64 738.17,121.63 748.49,119.702C758.81,117.77 769.14,101.28 774.3,96.676"></path>
+  </g>
+</svg>
+                </div>
+              
+
+              
+              <div class="grid grid-cols-2 gap-3 pb-4 border-b border-grey-200 dark:border-grey-700">
+                <div class="flex flex-col gap-0.5">
+                  <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                    this version
+                  </p>
+                  <p class="text-grey-700 dark:text-grey-100 text-base font-bold">
+                    152 937
+                  </p>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                    yesterday
+                  </p>
+                  <p class="text-grey-700 dark:text-grey-100 text-base font-bold">
+                    126 655
+                  </p>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                    last 7 days
+                  </p>
+                  <p class="text-grey-700 dark:text-grey-100 text-base font-bold">
+                    645 322
+                  </p>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                    all time
+                  </p>
+                  <p class="text-grey-700 dark:text-grey-100 text-base font-bold">
+                    158 780 152
+                  </p>
+                </div>
+              </div>
+
+              
+              <div class="grid grid-cols-2 gap-x-3 gap-y-4 pt-4">
+                <div class="flex flex-col gap-0.5">
+                  <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                    Last Updated
+                  </p>
+                  <p class="text-grey-700 dark:text-grey-100 font-bold">
+                    Oct 20, 2026
+                  </p>
+                </div>
+                
+                  <div class="flex flex-col gap-0.5">
+                    <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                      License
+                    </p>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <p class="text-grey-700 dark:text-grey-100 font-bold">
+                        MIT
+                      </p>
+                    </div>
+                  </div>
+                
+                
+                  <div class="flex flex-col gap-0.5">
+                    <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                      Build Tools
+                    </p>
+                    <div class="flex flex-wrap gap-1.5">
+                      
+                        <span class="inline-flex items-center justify-center px-3 py-1 rounded text-xs font-medium leading-3 bg-purple-100 text-purple-700">
+  mix
+</span>
+                      
+                    </div>
+                  </div>
+                
+                
+                  <div class="flex flex-col gap-0.5">
+                    <p class="text-grey-400 dark:text-grey-300 text-[10px] font-medium uppercase tracking-wide">
+                      Publisher
+                    </p>
+                    <a href="/users/steffend" class="flex items-center gap-1.5 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+                      <img src="https://www.gravatar.com/avatar/fd5abc604713a964ad2c527eda5003a6?s=80&amp;d=retro" class="size-5 rounded-full" alt="steffend">
+                      <span class="text-grey-700 dark:text-grey-100 text-sm font-medium">
+                        steffend
+                      </span>
+                    </a>
+                  </div>
+                
+              </div>
+            </div>
+
+            
+
+            
+            
+              <div class="bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-lg p-5">
+                <h3 class="text-grey-700 dark:text-grey-100 text-lg font-semibold mb-4">Links</h3>
+                <ul class="space-y-2">
+                  
+                    <li>
+                      <a href="https://phoenix.hexdocs.pm/changelog.html" rel="nofollow" class="text-sm text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 hover:underline">
+                        Changelog
+                      </a>
+                    </li>
+                  
+                    <li>
+                      <a href="https://github.com/phoenixframework/phoenix" rel="nofollow" class="text-sm text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-200 hover:underline">
+                        GitHub
+                      </a>
+                    </li>
+                  
+                </ul>
+              </div>
+            
+
+            
+            
+              <div class="bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-lg p-5">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-grey-700 dark:text-grey-100 text-lg font-semibold">
+                    Owners
+                  </h3>
+                  
+                </div>
+                <ul class="space-y-3">
+                  
+                    <li>
+                      <a href="/users/chrismccord" class="flex items-center gap-2 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+                        <img src="https://www.gravatar.com/avatar/c4a2386bb3a49400cf3a08863746b703?s=80&amp;d=retro" class="size-6 rounded-full" alt="chrismccord">
+                        <span class="text-grey-700 dark:text-grey-100 text-sm font-medium">
+                          chrismccord
+                        </span>
+                      </a>
+                    </li>
+                  
+                    <li>
+                      <a href="/users/gazler" class="flex items-center gap-2 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+                        <img src="https://www.gravatar.com/avatar/9ed8d4e8807d54e62ebf2cdb14aaa1a5?s=80&amp;d=retro" class="size-6 rounded-full" alt="gazler">
+                        <span class="text-grey-700 dark:text-grey-100 text-sm font-medium">
+                          gazler
+                        </span>
+                      </a>
+                    </li>
+                  
+                    <li>
+                      <a href="/users/jeregrine" class="flex items-center gap-2 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+                        <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?s=80&amp;d=mp" class="size-6 rounded-full" alt="jeregrine">
+                        <span class="text-grey-700 dark:text-grey-100 text-sm font-medium">
+                          jeregrine
+                        </span>
+                      </a>
+                    </li>
+                  
+                    <li>
+                      <a href="/users/josevalim" class="flex items-center gap-2 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+                        <img src="https://www.gravatar.com/avatar/e837f6b7fd146ab16ed3d663476c063e?s=80&amp;d=retro" class="size-6 rounded-full" alt="josevalim">
+                        <span class="text-grey-700 dark:text-grey-100 text-sm font-medium">
+                          josevalim
+                        </span>
+                      </a>
+                    </li>
+                  
+                    <li>
+                      <a href="/users/steffend" class="flex items-center gap-2 hover:text-purple-600 dark:hover:text-primary-300 transition-colors">
+                        <img src="https://www.gravatar.com/avatar/fd5abc604713a964ad2c527eda5003a6?s=80&amp;d=retro" class="size-6 rounded-full" alt="steffend">
+                        <span class="text-grey-700 dark:text-grey-100 text-sm font-medium">
+                          steffend
+                        </span>
+                      </a>
+                    </li>
+                  
+                </ul>
+              </div>
+            
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </main>
+  </section>
+
+  <footer class="bg-grey-800 text-grey-200 font-sans">
+  <div class="max-w-7xl mx-auto px-4 pt-12 pb-10 flex flex-col gap-10">
+    <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-24 xl:gap-28">
+      <div class="flex w-full items-start justify-between gap-6 lg:w-auto lg:flex-col lg:items-start lg:justify-start lg:gap-6">
+  <div class="flex items-center gap-3">
+    <img src="/images/hex-full-a8183c4f9adac71516516d107d402b18.svg?vsn=d" alt="hex logo" class="h-8 w-auto">
+    <span class="text-white text-2xl font-bold tracking-tight">
+      Hex
+    </span>
+  </div>
+  <div class="flex gap-3 lg:mt-4">
+  <a href="https://github.com/hexpm" class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-grey-700 text-slate-200 hover:bg-grey-600 transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-500" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4" aria-hidden="true">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.528 2 12.07c0 4.449 2.865 8.222 6.839 9.558.5.095.683-.219.683-.487 0-.24-.01-1.034-.014-1.876-2.782.609-3.369-1.193-3.369-1.193-.454-1.166-1.11-1.477-1.11-1.477-.908-.625.07-.612.07-.612 1.004.071 1.532 1.045 1.532 1.045.893 1.55 2.341 1.103 2.91.844.091-.656.35-1.103.636-1.357-2.22-.257-4.555-1.117-4.555-4.969 0-1.098.388-1.995 1.025-2.698-.103-.259-.445-1.296.098-2.704 0 0 .84-.27 2.75 1.03A9.517 9.517 0 0 1 12 6.844a9.5 9.5 0 0 1 2.5.341c1.91-1.3 2.749-1.03 2.749-1.03.544 1.408.202 2.445.1 2.704.64.703 1.024 1.6 1.024 2.698 0 3.861-2.339 4.708-4.566 4.961.359.313.678.928.678 1.872 0 1.352-.013 2.442-.013 2.775 0 .27.18.586.688.486C19.138 20.287 22 16.517 22 12.07 22 6.528 17.523 2 12 2Z" fill="currentColor"></path>
+</svg>
+</a>
+  <a href="https://x.com/hexpm" class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-grey-700 text-slate-200 hover:bg-grey-600 transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-500" target="_blank" rel="noopener noreferrer" aria-label="X">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4" aria-hidden="true">
+  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
+</svg>
+</a>
+</div>
+</div>
+      <div class="flex-1">
+  <div class="grid grid-cols-1 gap-y-10 gap-x-12 md:grid-cols-3 lg:gap-x-16 xl:gap-x-24">
+    <div class="flex flex-col gap-3 font-medium leading-4">
+  
+      <a href="/about" class="text-grey-200 hover:text-white transition-colors">
+  About
+</a>
+      <a href="/blog" class="text-grey-200 hover:text-white transition-colors">
+  Blog
+</a>
+      <a href="/sponsors" class="text-grey-200 hover:text-white transition-colors">
+  Sponsors
+</a>
+      <a href="https://status.hex.pm" class="text-grey-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+  Status
+</a>
+      <a href="https://osv.dev/list?ecosystem=Hex" class="text-grey-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+  Advisories
+</a>
+    
+</div>
+
+    <div class="flex flex-col gap-3 font-medium leading-4">
+  
+      <a href="/docs" class="text-grey-200 hover:text-white transition-colors">
+  Documentation
+</a>
+      <a href="/docs/faq" class="text-grey-200 hover:text-white transition-colors">
+  FAQ
+</a>
+      <a href="https://github.com/hexpm/specifications" class="text-grey-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+  Specifications
+</a>
+      <a href="https://github.com/hexpm/hex/issues" class="text-grey-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+  Report Client Issue
+</a>
+      <a href="https://github.com/hexpm/hexpm/issues" class="text-grey-200 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+  Report General Issue
+</a>
+      <a href="mailto:security@hex.pm" class="text-grey-200 hover:text-white transition-colors">
+  Report Security Issue
+</a>
+      <a href="mailto:support@hex.pm" class="text-grey-200 hover:text-white transition-colors">
+  Contact Support
+</a>
+    
+</div>
+
+    <div class="flex flex-col gap-3 font-medium leading-4">
+  
+      <a href="/policies/codeofconduct" class="text-grey-200 hover:text-white transition-colors">
+  Code of Conduct
+</a>
+      <a href="/policies/termsofservice" class="text-grey-200 hover:text-white transition-colors">
+  Terms of Service
+</a>
+      <a href="/policies/privacy" class="text-grey-200 hover:text-white transition-colors">
+  Privacy Policy
+</a>
+      <a href="/policies/copyright" class="text-grey-200 hover:text-white transition-colors">
+  Copyright Policy
+</a>
+      <a href="/policies/dispute" class="text-grey-200 hover:text-white transition-colors">
+  Dispute Policy
+</a>
+    
+</div>
+  </div>
+</div>
+    </div>
+  </div>
+  <div class="bg-grey-700">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col items-center gap-3 text-sm text-grey-200 md:flex-row md:justify-between">
+    <p class="text-center leading-[14px] md:text-left">
+      Copyright 2015. Six Colors AB.
+    </p>
+    <p class="text-center leading-[18px] md:text-right">
+      Powered by the
+      <a href="https://www.erlang.org/" class="underline hover:text-grey-300">Erlang VM</a>
+      and the
+      <a href="https://elixir-lang.org/" class="underline hover:text-grey-300">
+        Elixir Programming Language
+      </a>
+    </p>
+  </div>
+</div>
+</footer>
+  <div id="search-cheatsheet" class="fixed inset-0 z-50 hidden " aria-labelledby="search-cheatsheet-title">
+  
+  <div id="search-cheatsheet-backdrop" class="fixed inset-0 bg-grey-900/25 dark:bg-grey-950/60 transition-opacity hidden" aria-hidden="true" phx-click="[[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-backdrop&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-content&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;overflow-hidden&quot;],&quot;to&quot;:&quot;body&quot;}]]">
+  </div>
+
+  
+  <div class="fixed inset-0 z-10 overflow-y-auto">
+    <div class="flex min-h-full items-center justify-center p-4">
+      
+      <div id="search-cheatsheet-content" class="relative w-full bg-white dark:bg-grey-800 border border-grey-200 dark:border-grey-700 rounded-[20px] flex flex-col max-h-[calc(100vh-2rem)] p-6 shadow-[0px_15px_50px_0px_rgba(3,9,19,0.4)] hidden max-w-2xl" role="dialog" aria-modal="true" phx-click-away="[[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-backdrop&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-content&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;overflow-hidden&quot;],&quot;to&quot;:&quot;body&quot;}]]" phx-window-keydown="[[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-backdrop&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-content&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;overflow-hidden&quot;],&quot;to&quot;:&quot;body&quot;}]]" phx-key="escape">
+        
+        <div class="absolute top-6 right-6">
+          <button type="button" class="p-2 rounded transition-colors cursor-pointer text-grey-400 hover:text-grey-700 hover:bg-grey-100 disabled:hover:text-grey-400 disabled:hover:bg-transparent dark:text-grey-300 dark:hover:text-grey-100 dark:hover:bg-grey-800 dark:disabled:hover:text-grey-300 disabled:opacity-50 disabled:cursor-not-allowed " phx-click="[[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-backdrop&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;],[&quot;opacity-0&quot;]]}],[&quot;add_class&quot;,{&quot;names&quot;:[&quot;hidden&quot;],&quot;to&quot;:&quot;#search-cheatsheet-content&quot;,&quot;transition&quot;:[[&quot;transition-all&quot;,&quot;transform&quot;,&quot;ease-in&quot;,&quot;duration-200&quot;],[&quot;opacity-100&quot;,&quot;translate-y-0&quot;,&quot;sm:scale-100&quot;],[&quot;opacity-0&quot;,&quot;translate-y-4&quot;,&quot;sm:translate-y-0&quot;,&quot;sm:scale-95&quot;]]}],[&quot;remove_class&quot;,{&quot;names&quot;:[&quot;overflow-hidden&quot;],&quot;to&quot;:&quot;body&quot;}]]" aria-label="Close modal">
+  <svg aria-hidden="true" class="heroicon heroicon-x-mark" fill="none" height="16" title="x-mark" version="1.1" viewBox="0 0 24 24" width="16"><g title="x-mark"><path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" /></g></svg>
+</button>
+        </div>
+
+        
+        
+          <div class="mb-4 pr-10">
+            
+              <h2 id="search-cheatsheet-title" class="text-lg font-semibold text-grey-900 dark:text-white">
+                Search filters
+              </h2>
+            
+          </div>
+        
+
+        
+        <div class="flex-1 overflow-y-auto p-1.5">
+          
+  <p class="text-sm text-grey-600 dark:text-grey-300 mb-3">
+    Type any of these into the search box. They can be combined with free text
+    which searches package names and descriptions.
+  </p>
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left border-b">
+        <th class="py-1 pr-3">Operator</th>
+        <th class="py-1 pr-3">Description</th>
+        <th class="py-1">Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b last:border-b-0">
+        <td class="py-1 pr-3 font-mono">name:</td>
+        <td class="py-1 pr-3">Match package name. Supports * wildcards and repo/package form</td>
+        <td class="py-1 font-mono">name:phx* or name:hexpm/phoenix</td>
+      </tr><tr class="border-b last:border-b-0">
+        <td class="py-1 pr-3 font-mono">description:</td>
+        <td class="py-1 pr-3">Full-text search of package descriptions</td>
+        <td class="py-1 font-mono">description:auth</td>
+      </tr><tr class="border-b last:border-b-0">
+        <td class="py-1 pr-3 font-mono">depends:</td>
+        <td class="py-1 pr-3">Packages depending on a given package. Supports repo:package form</td>
+        <td class="py-1 font-mono">depends:ecto or depends:hexpm:ecto</td>
+      </tr><tr class="border-b last:border-b-0">
+        <td class="py-1 pr-3 font-mono">build_tool:</td>
+        <td class="py-1 pr-3">Filter by build tool</td>
+        <td class="py-1 font-mono">build_tool:mix</td>
+      </tr><tr class="border-b last:border-b-0">
+        <td class="py-1 pr-3 font-mono">updated_after:</td>
+        <td class="py-1 pr-3">Packages updated after an ISO8601 datetime</td>
+        <td class="py-1 font-mono">updated_after:2025-01-01T00:00:00Z</td>
+      </tr><tr class="border-b last:border-b-0">
+        <td class="py-1 pr-3 font-mono">extra:</td>
+        <td class="py-1 pr-3">Match custom metadata (key,value). Nested keys are separated by commas</td>
+        <td class="py-1 font-mono">extra:license,MIT</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="text-sm text-grey-600 dark:text-grey-300 mt-4">
+    Wrap values in double quotes to include spaces, e.g. <code class="font-mono">name:"my package"</code>.
+  </p>
+
+        </div>
+
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+    <script phx-track-static src="/assets/app-54aaacae22e6285333106a111098fb05.js?vsn=d" nonce="7gslwSr_dYSncsdxUn3lYXpfNmPIx4jkgju0KzX2QfA">
+    </script>
+  </body>
+</html>
