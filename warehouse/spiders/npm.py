@@ -279,7 +279,7 @@ class NpmSpider(BrowserSpider):
     # npmjs.com anti-bot scoring ratchets up under fast browsing; keep the
     # rendered crawl paced even though pages are fetched through the browser.
     custom_settings = {
-        "DOWNLOAD_DELAY": 1.0,
+        "DOWNLOAD_DELAY": 10.0,
         "AUTOTHROTTLE_ENABLED": True,
     }
 

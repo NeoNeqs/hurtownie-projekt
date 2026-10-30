@@ -218,7 +218,7 @@ class NpmRegistrySpider(BrowserSpider):
     # once a crawl gets chatty, so this spider paces itself regardless of the
     # global download delay.
     custom_settings = {
-        "DOWNLOAD_DELAY": 1.0,
+        "DOWNLOAD_DELAY": 10.0,
         "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
     }
 
