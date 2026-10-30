@@ -16,7 +16,7 @@
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 )
@@ -36,7 +36,7 @@ ORDER BY e.name;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -72,7 +72,7 @@ ORDER BY s.ecosystem;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -98,7 +98,7 @@ ORDER BY s.ecosystem, advisories DESC;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -134,7 +134,7 @@ ORDER BY s.ecosystem;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -171,7 +171,7 @@ ORDER BY ecosystem;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -212,7 +212,7 @@ ORDER BY l.ecosystem;
 WITH RECURSIVE latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -278,7 +278,7 @@ ORDER BY g.ecosystem;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (
@@ -378,7 +378,7 @@ ORDER BY ecosystem;
 WITH latest_run AS (
     SELECT DISTINCT ON (source) id, source
     FROM collection_run
-    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist')
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
       AND status IN ('succeeded', 'partial')
     ORDER BY source, started_at DESC
 ), sample AS (

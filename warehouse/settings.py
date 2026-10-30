@@ -156,6 +156,28 @@ HEX_PAGE_LIMIT = _env_int("HEX_PAGE_LIMIT", 767)
 HEX_MAX_VERSIONS = _env_int("HEX_MAX_VERSIONS", 10)
 HEX_VERSION_SELECTION = os.getenv("HEX_VERSION_SELECTION", "spread")
 
+CRATES_POPULAR_COUNT = _env_int("CRATES_POPULAR_COUNT", 25)
+CRATES_RANDOM_COUNT = _env_int("CRATES_RANDOM_COUNT", 5)
+CRATES_SAMPLE_SEED = _env_int("CRATES_SAMPLE_SEED", 1)
+# crates.io refuses alphabetical pages above ~200 for performance reasons.
+# The random group therefore covers the first 10k crates, not the whole index.
+CRATES_RANDOM_PAGES = _env_int("CRATES_RANDOM_PAGES", 5)
+CRATES_PAGE_LIMIT = _env_int("CRATES_PAGE_LIMIT", 200)
+CRATES_VERSION_PAGES = _env_int("CRATES_VERSION_PAGES", 1)
+CRATES_MAX_VERSIONS = _env_int("CRATES_MAX_VERSIONS", 10)
+CRATES_VERSION_SELECTION = os.getenv("CRATES_VERSION_SELECTION", "spread")
+
+NUGET_POPULAR_COUNT = _env_int("NUGET_POPULAR_COUNT", 25)
+NUGET_RANDOM_COUNT = _env_int("NUGET_RANDOM_COUNT", 5)
+NUGET_SAMPLE_SEED = _env_int("NUGET_SAMPLE_SEED", 1)
+# The gallery has ~554k packages at 20 per page, but search pagination stops
+# after ~1000 pages. The random pool therefore covers the tail of the relevance
+# ordering rather than the whole catalogue.
+NUGET_RANDOM_PAGES = _env_int("NUGET_RANDOM_PAGES", 5)
+NUGET_PAGE_LIMIT = _env_int("NUGET_PAGE_LIMIT", 1000)
+NUGET_MAX_VERSIONS = _env_int("NUGET_MAX_VERSIONS", 10)
+NUGET_VERSION_SELECTION = os.getenv("NUGET_VERSION_SELECTION", "spread")
+
 PACKAGIST_POPULAR_COUNT = _env_int("PACKAGIST_POPULAR_COUNT", 25)
 PACKAGIST_RANDOM_COUNT = _env_int("PACKAGIST_RANDOM_COUNT", 5)
 PACKAGIST_SAMPLE_SEED = _env_int("PACKAGIST_SAMPLE_SEED", 1)

@@ -7,8 +7,8 @@ comes from a registry website. OSV supplies vulnerability records, and a
 version-aware matcher maps affected ranges onto the versions that were
 collected.
 
-Implemented ecosystems: **npm**, **PyPI**, **RubyGems**, **Hex**, **Packagist**.
-Planned: crates.io, NuGet.
+Implemented ecosystems: **npm**, **PyPI**, **crates.io**, **RubyGems**, **NuGet**,
+**Packagist**, **Hex**.
 
 ## Layout
 
@@ -20,10 +20,13 @@ Planned: crates.io, NuGet.
 | `warehouse/spiders/npm.py` | npm discovery, metadata, versions, dependencies |
 | `warehouse/spiders/pypi.py` | PyPI discovery, metadata, release history |
 | `warehouse/spiders/rubygems.py` | RubyGems discovery, metadata, versions, dependencies |
+| `warehouse/spiders/crates.py` | crates.io SPA discovery, metadata, versions, dependencies |
 | `warehouse/spiders/hex.py` | Hex discovery, metadata, versions, dependencies |
 | `warehouse/spiders/packagist.py` | Packagist discovery, metadata, versions, dependencies |
+| `warehouse/spiders/nuget.py` | NuGet discovery, metadata, versions, dependencies |
 | `warehouse/sampling.py` | Popular/random selection and release-history sampling |
 | `warehouse/osv.py` | OSV ingestion (advisories, aliases, references, ranges) |
+| `warehouse/nvd.py` | NVD CVSS/severity enrichment for OSV advisories |
 | `warehouse/versioning.py` | SemVer, PEP 440 and RubyGems version ordering |
 | `warehouse/matching.py` | Version-to-range matching and persistence |
 | `warehouse/pipelines.py` | Validation, deduplication and storage |
@@ -75,6 +78,15 @@ HEX_POPULAR_COUNT=4 HEX_RANDOM_COUNT=2 HEX_MAX_VERSIONS=3 \
 # Packagist: explore popular pages + seeded names from the package list
 PACKAGIST_POPULAR_COUNT=4 PACKAGIST_RANDOM_COUNT=2 PACKAGIST_MAX_VERSIONS=3 \
   .venv/bin/scrapy crawl packagist
+
+# NuGet: downloads ranking + random search pages; the full version table comes
+# from the gallery's load-more endpoint
+NUGET_POPULAR_COUNT=4 NUGET_RANDOM_COUNT=2 NUGET_MAX_VERSIONS=3 \
+  .venv/bin/scrapy crawl nuget
+
+# crates.io: downloads ranking + alphabetical pages, rendered by Selenium
+CRATES_POPULAR_COUNT=4 CRATES_RANDOM_COUNT=2 CRATES_MAX_VERSIONS=3 \
+  .venv/bin/scrapy crawl crates
 ```
 
 Every run creates a `collection_run` row and records failures in
@@ -91,11 +103,18 @@ the old behaviour for comparison; the same setting exists per ecosystem.
 ```bash
 .venv/bin/python -m warehouse.osv --ecosystem npm --delay 0.1
 .venv/bin/python -m warehouse.matching --ecosystem npm
+.venv/bin/python -m warehouse.nvd --limit 100   # optional CVSS/severity fill
 ```
 
-Repeat with `PyPI`, `RubyGems`, `Hex` and `Packagist`. Ingestion is idempotent: advisories are
-upserted by source id, and ranges are replaced per advisory and package.
-Matching deletes and recomputes results for the ecosystem, so reruns are safe.
+Repeat with `PyPI`, `crates.io`, `RubyGems`, `NuGet`, `Hex` and `Packagist`.
+Ingestion is idempotent: advisories are upserted by source id, and ranges are
+replaced per advisory and package. Matching deletes and recomputes results for
+the ecosystem, so reruns are safe.
+
+NVD is used only as a supplement: the enricher looks up CVE aliases that OSV
+already recorded and fills missing severity and CVSS fields. It never adds
+advisories on its own. Without `NVD_API_KEY` the client waits 6 seconds between
+requests, which is still slow for a large backlog.
 
 Unsupported range formats (for example `GIT`) are stored with
 `certainty = 'uncertain'` instead of being guessed; a missing advisory is never
@@ -148,18 +167,26 @@ package version. Affected ranges keep the advisory's own range rows, and
   randomly chosen pages of the alphabetical package index.
 - **Packagist popular**: the explore pages sorted by downloads. **Random**:
   seeded names drawn from the published package name list.
+- **NuGet popular**: gallery search sorted by total downloads. **Random**:
+  seeded search-result pages; the gallery stops paginating around page 1000,
+  so this covers the tail of the relevance ordering rather than all 554k
+  packages.
+- **crates.io popular**: the crate list sorted by all-time downloads. **Random**:
+  seeded pages of the alphabetical list. crates.io refuses alphabetical pages
+  above ~200, so the pool is about 10k crates.
 
 The random groups are reproducible from the recorded seed. They are not uniform
 samples of the whole catalogue: npm random terms are arbitrary search words,
-PyPI shard choice covers a few letter ranges, and the RubyGems and Hex indexes
-are alphabetical.
+PyPI shard choice covers a few letter ranges, the RubyGems and Hex indexes are
+alphabetical, and the NuGet and crates.io pools stop at the registries' own
+pagination limits.
 
 ## Collection limitations
 
 - **PyPI project pages behind Fastly.** Uncached project pages are sometimes
-  answered with a "Client Challenge" interstitial. The browser layer detects it
-  and records a `ChallengeBlocked` collection error; it does not try to defeat
-  the challenge. Those packages are absent from the results.
+  answered with a "Client Challenge" interstitial. The browser layer waits for
+  the interstitial to clear and records a `ChallengeBlocked` collection error
+  when it does not. Packages that remain blocked are absent from the results.
 - **PyPI dependencies are not collected.** pypi.org does not render
   per-release dependencies on the project page, and its JSON API is disallowed
   by robots.txt. PyPI rows therefore contribute metadata and versions only.
@@ -176,6 +203,18 @@ are alphabetical.
   are excluded because they are not Composer packages. Branch aliases
   (`dev-main`, `13.x-dev`) are not treated as releases, and the first selection
   pass spreads over version order because dates arrive with the panels.
+- **NuGet dependencies are per target framework.** The warehouse stores one row
+  per dependency name and version, so a dependency is kept if any framework
+  requires it; the constraint is the first one the gallery lists. The full
+  version table comes from a POST to the gallery's load-more endpoint, using the
+  anti-forgery token from the same package page. If that request fails the
+  spider falls back to the eight versions shown initially.
+- **crates.io is a client-rendered Svelte app**, so every page goes through
+  Selenium. The versions page loads 100 releases at a time; `CRATES_VERSION_PAGES`
+  controls how many "Load More" clicks are made. If the full list was not
+  loaded, `first_published_at` is left empty instead of reporting the oldest
+  loaded release as the first one. Dependencies come from the version-specific
+  dependencies page, which exposes runtime, build and dev kinds.
 - **Rates and scale.** Concurrent requests per domain is 1 by default. The
   2,500-packages-per-ecosystem target is a goal, not a result; run a pilot,
   measure, and adjust.
