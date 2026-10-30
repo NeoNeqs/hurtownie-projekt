@@ -105,6 +105,7 @@ scripts/scale_collection.sh
 # output/scale-<timestamp>/report.md
 # output/scale-<timestamp>/dashboard.html
 # output/scale-<timestamp>/summary.tsv  (per-spider status and exit code)
+scripts/scale_status.sh                # progress of the newest run
 ```
 
 Defaults: 250 popular + 50 random packages per ecosystem, 5 sampled versions per
