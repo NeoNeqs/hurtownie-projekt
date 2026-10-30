@@ -276,6 +276,12 @@ class NpmSpider(BrowserSpider):
         "selenium_wait_for": "h1",
         "selenium_wait": 0.2,
     }
+    # npmjs.com anti-bot scoring ratchets up under fast browsing; keep the
+    # rendered crawl paced even though pages are fetched through the browser.
+    custom_settings = {
+        "DOWNLOAD_DELAY": 1.0,
+        "AUTOTHROTTLE_ENABLED": True,
+    }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)

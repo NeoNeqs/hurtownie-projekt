@@ -214,6 +214,13 @@ class NpmRegistrySpider(BrowserSpider):
     ecosystem = "npm"
     source = "registry.npmjs.org"
     selenium_meta = {"selenium": False}
+    # npm registry search/packument endpoints throttle aggressively (HTTP 429)
+    # once a crawl gets chatty, so this spider paces itself regardless of the
+    # global download delay.
+    custom_settings = {
+        "DOWNLOAD_DELAY": 1.0,
+        "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
+    }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
