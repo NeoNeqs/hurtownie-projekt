@@ -18,14 +18,16 @@ logger = logging.getLogger(__name__)
 
 RATE_LIMIT_STATUS = 429
 RATE_LIMIT_COOLDOWN_SECONDS = float(os.getenv("NPM_RETRY_COOLDOWN_SECONDS", "600") or 600)
+RATE_LIMIT_MAX_RETRIES = 10
 
 
 class NpmRateLimitRetryMiddleware(RetryMiddleware):
     """Rate-limit aware retry for npm crawlers.
 
     npm answers crawlers with ``{"message":"Too Many Requests", ...}`` when a
-    crawl gets chatty. Scrapy's default retry re-queues immediately, so this
-    subclass sleeps a cool-down before re-trying after a rate-limit response.
+    crawl gets chatty. Scrapy's default retry re-queues immediately, gives up
+    after RETRY_TIMES and lets the errbacks close the run; this subclass sleeps
+    a cool-down and keeps retrying while the crawler is being rate limited.
     """
 
     def __init__(self, settings: Any) -> None:
@@ -34,8 +36,12 @@ class NpmRateLimitRetryMiddleware(RetryMiddleware):
 
     def _retry(self, request: Request, reason: Any) -> Request | None:
         if getattr(self, "_cool_down_pending", False):
-            time.sleep(RATE_LIMIT_COOLDOWN_SECONDS)
             self._cool_down_pending = False
+            request.meta["max_retry_times"] = max(
+                int(request.meta.get("max_retry_times") or self.max_retry_times),
+                RATE_LIMIT_MAX_RETRIES,
+            )
+            time.sleep(RATE_LIMIT_COOLDOWN_SECONDS)
         return super()._retry(request, reason)
 
     def process_response(self, request: Request, response: Response, spider: Any) -> Any:

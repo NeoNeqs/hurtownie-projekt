@@ -52,6 +52,7 @@ def test_retry_after_rate_limit_sleeps_cool_down_then_retries() -> None:
 
     sleep.assert_called_once()
     assert sleep.call_args[0][0] == 600
+    assert request.meta["max_retry_times"] >= 10
     assert isinstance(retry, Request)
 
 
