@@ -94,6 +94,32 @@ Every run creates a `collection_run` row and records failures in
 `collection_error`. A run left behind by a killed process is marked `partial`
 on the next start.
 
+## Scale run
+
+`scripts/scale_collection.sh` runs a moderate sample across all seven
+ecosystems, then ingests OSV, matches versions, and writes a Markdown report and
+dashboard:
+
+```bash
+scripts/scale_collection.sh
+# output/scale-<timestamp>/report.md
+# output/scale-<timestamp>/dashboard.html
+# output/scale-<timestamp>/summary.tsv  (per-spider status and exit code)
+```
+
+Defaults: 250 popular + 50 random packages per ecosystem, 5 sampled versions per
+package, sequential execution, and a per-ecosystem timeout (3 h HTTP, 6 h
+Selenium). Override the sample size with the usual `*_POPULAR_COUNT` /
+`*_RANDOM_COUNT` variables, or the timeouts with `SCALE_TIMEOUT_HTTP` /
+`SCALE_TIMEOUT_BROWSER`. RubyGems is the exception: its stats pages expose only
+the top 100 gems, so the script requests 100 popular + 50 random there.
+
+The orchestrator is deliberately sequential. All Selenium ecosystems share one
+browser pool, and running them in parallel would mix rate-limit and challenge
+failures, making the blocking measurements meaningless. A failed or timed-out
+spider does not stop the run; its partial data is still processed and the exit
+code is recorded in `summary.tsv`.
+
 Version selection defaults to `spread`: the sampler takes the oldest, newest and
 evenly spaced releases. Taking only the most downloaded versions hides exactly
 the old versions advisories target. `NPM_VERSION_SELECTION=downloads` restores
@@ -171,8 +197,10 @@ package version. Affected ranges keep the advisory's own range rows, and
   search terms, round-robin across queries, excluding popular packages.
 - **PyPI popular**: the public top-pypi-packages dataset (monthly download
   ranking). **Random**: project sitemap shards chosen by seed.
-- **RubyGems popular**: the stats page (top gems by downloads). **Random**:
-  randomly chosen pages of the alphabetical gem index.
+- **RubyGems popular**: the stats page (top gems by downloads). rubygems.org
+  serves ten stats pages and redirects later pages back to page 1, so the
+  popular group is capped at 100 gems. **Random**: randomly chosen pages of the
+  alphabetical gem index.
 - **Hex popular**: the package index sorted by total downloads. **Random**:
   randomly chosen pages of the alphabetical package index.
 - **Packagist popular**: the explore pages sorted by downloads. **Random**:

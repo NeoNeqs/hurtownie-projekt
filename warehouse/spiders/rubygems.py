@@ -28,6 +28,9 @@ from warehouse.spiders.base import BrowserSpider
 BASE_URL = "https://rubygems.org"
 STATS_URL = f"{BASE_URL}/stats"
 STATS_PER_PAGE = 10
+# rubygems.org serves only ten stats pages; page 11 redirects back to page 1.
+# That caps the download-ranked popular group at 100 gems.
+STATS_MAX_PAGES = 10
 GEMS_PER_PAGE = 30
 MONTH_FORMATS = ("%B %d, %Y", "%b %d, %Y")
 
@@ -38,6 +41,14 @@ def gem_url(name: str) -> str:
 
 def stats_url(page: int) -> str:
     return STATS_URL if page <= 1 else f"{STATS_URL}?page={page}"
+
+
+def popular_page_count(popular_count: int) -> int:
+    """Pages needed for the download-ranked group, capped by the site."""
+    if popular_count <= 0:
+        return 0
+    requested = max(1, -(-popular_count // STATS_PER_PAGE))
+    return min(requested, STATS_MAX_PAGES)
 
 
 def versions_url(name: str) -> str:
@@ -223,7 +234,15 @@ class RubyGemsSpider(BrowserSpider):
 
         requests: list[Request] = []
         if popular_count > 0:
-            pages = max(1, -(-popular_count // STATS_PER_PAGE))
+            pages = popular_page_count(popular_count)
+            if popular_count > STATS_MAX_PAGES * STATS_PER_PAGE:
+                self.logger.warning(
+                    "RUBYGEMS_POPULAR_COUNT=%d exceeds the %d gems available "
+                    "from the stats pages; collecting %d",
+                    popular_count,
+                    STATS_MAX_PAGES * STATS_PER_PAGE,
+                    STATS_MAX_PAGES * STATS_PER_PAGE,
+                )
             self._pending_discovery += pages
             for page in range(1, pages + 1):
                 requests.append(

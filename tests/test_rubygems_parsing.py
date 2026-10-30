@@ -12,6 +12,7 @@ from warehouse.spiders.rubygems import (
     parse_month,
     parse_stats_page,
     parse_versions_page,
+    popular_page_count,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -125,3 +126,12 @@ def test_discovery_helpers_ignore_version_links() -> None:
 
     assert parse_stats_page(response) == ["rails", "rake"]
     assert parse_gem_index(response) == ["rails", "rake"]
+
+
+def test_popular_page_count_stops_at_the_stats_limit() -> None:
+    assert popular_page_count(0) == 0
+    assert popular_page_count(1) == 1
+    assert popular_page_count(10) == 1
+    assert popular_page_count(11) == 2
+    assert popular_page_count(100) == 10
+    assert popular_page_count(250) == 10
