@@ -14,6 +14,8 @@
 # Environment:
 #   WAREHOUSE_DSN      PostgreSQL DSN (default: local warehouse on port 55432)
 #   SCALE_RUN_DIR      output directory (default: output/scale-<timestamp>)
+#   SCALE_ECOSYSTEMS   space-separated subset to run (default: all seven);
+#                      useful for resuming after an interrupted run
 #   SCALE_TIMEOUT_HTTP seconds per HTTP-only ecosystem (default: 10800 = 3 h)
 #   SCALE_TIMEOUT_BROWSER seconds per Selenium ecosystem (default: 21600 = 6 h)
 #   SCALE_MAX_VERSIONS versions sampled per package (default: 5)
@@ -33,9 +35,17 @@ SCRAPY="$ROOT/.venv/bin/scrapy"
 
 mkdir -p "$RUN_DIR"
 SUMMARY="$RUN_DIR/summary.tsv"
+SELECTED="${SCALE_ECOSYSTEMS:-nuget pypi packagist hex rubygems npm crates}"
 
 log() {
     printf '%s %s\n' "$(date -Is)" "$*" | tee -a "$RUN_DIR/driver.log"
+}
+
+should_run() {
+    case " $SELECTED " in
+        *" $1 "*) return 0 ;;
+        *) return 1 ;;
+    esac
 }
 
 if [ ! -x "$PYTHON" ] || [ ! -x "$SCRAPY" ]; then
@@ -121,47 +131,61 @@ run_spider() {
     run_osv_and_matching "$spider" "$ecosystem"
 }
 
-log "=== NuGet"
-run_spider nuget NuGet "$TIMEOUT_HTTP" \
-    NUGET_POPULAR_COUNT=250 NUGET_RANDOM_COUNT=50 NUGET_RANDOM_PAGES=10 \
-    NUGET_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run nuget; then
+    log "=== NuGet"
+    run_spider nuget NuGet "$TIMEOUT_HTTP" \
+        NUGET_POPULAR_COUNT=250 NUGET_RANDOM_COUNT=50 NUGET_RANDOM_PAGES=10 \
+        NUGET_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
-log "=== PyPI"
-run_spider pypi PyPI "$TIMEOUT_HTTP" \
-    PYPI_POPULAR_COUNT=250 PYPI_RANDOM_COUNT=50 PYPI_SITEMAP_SHARDS=10 \
-    PYPI_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run pypi; then
+    log "=== PyPI"
+    run_spider pypi PyPI "$TIMEOUT_HTTP" \
+        PYPI_POPULAR_COUNT=250 PYPI_RANDOM_COUNT=50 PYPI_SITEMAP_SHARDS=10 \
+        PYPI_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
-log "=== Packagist"
-run_spider packagist Packagist "$TIMEOUT_BROWSER" \
-    BROWSER_HEADLESS=true \
-    PACKAGIST_POPULAR_COUNT=250 PACKAGIST_RANDOM_COUNT=50 \
-    PACKAGIST_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run packagist; then
+    log "=== Packagist"
+    run_spider packagist Packagist "$TIMEOUT_BROWSER" \
+        BROWSER_HEADLESS=true \
+        PACKAGIST_POPULAR_COUNT=250 PACKAGIST_RANDOM_COUNT=50 \
+        PACKAGIST_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
-log "=== Hex"
-run_spider hex Hex "$TIMEOUT_BROWSER" \
-    BROWSER_HEADLESS=true \
-    HEX_POPULAR_COUNT=250 HEX_RANDOM_COUNT=50 HEX_RANDOM_PAGES=10 \
-    HEX_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run hex; then
+    log "=== Hex"
+    run_spider hex Hex "$TIMEOUT_BROWSER" \
+        BROWSER_HEADLESS=true \
+        HEX_POPULAR_COUNT=250 HEX_RANDOM_COUNT=50 HEX_RANDOM_PAGES=10 \
+        HEX_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
-log "=== RubyGems (stats pages cap the popular group at 100)"
-run_spider rubygems RubyGems "$TIMEOUT_BROWSER" \
-    BROWSER_HEADLESS=true \
-    RUBYGEMS_POPULAR_COUNT=100 RUBYGEMS_RANDOM_COUNT=50 RUBYGEMS_RANDOM_PAGES=10 \
-    RUBYGEMS_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run rubygems; then
+    log "=== RubyGems (stats pages cap the popular group at 100)"
+    run_spider rubygems RubyGems "$TIMEOUT_BROWSER" \
+        BROWSER_HEADLESS=true \
+        RUBYGEMS_POPULAR_COUNT=100 RUBYGEMS_RANDOM_COUNT=50 RUBYGEMS_RANDOM_PAGES=10 \
+        RUBYGEMS_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
-log "=== npm (headed Chrome for Cloudflare)"
-run_spider npm npm "$TIMEOUT_BROWSER" \
-    BROWSER_HEADLESS=false \
-    BROWSER_PROFILE_DIR="${BROWSER_PROFILE_DIR:-/tmp/opencode/chrome-npm-profile}" \
-    NPM_POPULAR_COUNT=250 NPM_RANDOM_COUNT=50 \
-    NPM_SEARCH_QUERIES="framework,http,cli,testing,react,vue,express,webpack,typescript,build,api,ui" \
-    NPM_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run npm; then
+    log "=== npm (headed Chrome for Cloudflare)"
+    run_spider npm npm "$TIMEOUT_BROWSER" \
+        BROWSER_HEADLESS=false \
+        BROWSER_PROFILE_DIR="${BROWSER_PROFILE_DIR:-/tmp/opencode/chrome-npm-profile}" \
+        NPM_POPULAR_COUNT=250 NPM_RANDOM_COUNT=50 \
+        NPM_SEARCH_QUERIES="framework,http,cli,testing,react,vue,express,webpack,typescript,build,api,ui" \
+        NPM_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
-log "=== crates.io (Selenium, slowest, runs last)"
-run_spider crates crates.io "$TIMEOUT_BROWSER" \
-    BROWSER_HEADLESS=true \
-    CRATES_POPULAR_COUNT=250 CRATES_RANDOM_COUNT=50 CRATES_RANDOM_PAGES=10 \
-    CRATES_VERSION_PAGES=1 CRATES_MAX_VERSIONS="$MAX_VERSIONS"
+if should_run crates; then
+    log "=== crates.io (Selenium, slowest, runs last)"
+    run_spider crates crates.io "$TIMEOUT_BROWSER" \
+        BROWSER_HEADLESS=true \
+        CRATES_POPULAR_COUNT=250 CRATES_RANDOM_COUNT=50 CRATES_RANDOM_PAGES=10 \
+        CRATES_VERSION_PAGES=1 CRATES_MAX_VERSIONS="$MAX_VERSIONS"
+fi
 
 log "=== analysis"
 env WAREHOUSE_DSN="$DSN" "$PYTHON" analysis/run_queries.py --limit 50 \

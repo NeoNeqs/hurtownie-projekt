@@ -120,6 +120,18 @@ failures, making the blocking measurements meaningless. A failed or timed-out
 spider does not stop the run; its partial data is still processed and the exit
 code is recorded in `summary.tsv`.
 
+To resume after an interruption without repeating finished ecosystems, point at
+the same output directory and list what is left:
+
+```bash
+SCALE_RUN_DIR=output/scale-20261030-122225 \
+SCALE_ECOSYSTEMS="pypi packagist hex rubygems npm crates" \
+  scripts/scale_collection.sh
+```
+
+The analysis, report and dashboard at the end always cover the whole database,
+not just the ecosystems selected for that invocation.
+
 Version selection defaults to `spread`: the sampler takes the oldest, newest and
 evenly spaced releases. Taking only the most downloaded versions hides exactly
 the old versions advisories target. `NPM_VERSION_SELECTION=downloads` restores
