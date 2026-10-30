@@ -492,3 +492,31 @@ SELECT CASE spider
        now() - started_at AS age
 FROM latest
 ORDER BY ecosystem;
+
+-- name: collection_errors
+-- Failures recorded for the latest run of each ecosystem, grouped by stage and
+-- type. ChallengeBlocked rows here mean the collector could not read a page.
+WITH latest_run AS (
+    SELECT DISTINCT ON (source) id, source, spider
+    FROM collection_run
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
+      AND status IN ('succeeded', 'partial', 'failed')
+    ORDER BY source, started_at DESC
+)
+SELECT CASE r.spider
+           WHEN 'pypi' THEN 'PyPI'
+           WHEN 'crates' THEN 'crates.io'
+           WHEN 'rubygems' THEN 'RubyGems'
+           WHEN 'nuget' THEN 'NuGet'
+           WHEN 'packagist' THEN 'Packagist'
+           WHEN 'hex' THEN 'Hex'
+           ELSE r.spider
+       END AS ecosystem,
+       ce.stage,
+       ce.error_type,
+       count(*) AS occurrences,
+       min(ce.message) AS example
+FROM collection_error ce
+JOIN latest_run r ON r.id = ce.collection_run_id
+GROUP BY r.spider, ce.stage, ce.error_type
+ORDER BY ecosystem, occurrences DESC;

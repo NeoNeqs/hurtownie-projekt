@@ -27,12 +27,17 @@ from warehouse.spiders.base import BrowserSpider
 
 BASE_URL = "https://rubygems.org"
 STATS_URL = f"{BASE_URL}/stats"
+STATS_PER_PAGE = 10
 GEMS_PER_PAGE = 30
 MONTH_FORMATS = ("%B %d, %Y", "%b %d, %Y")
 
 
 def gem_url(name: str) -> str:
     return f"{BASE_URL}/gems/{name}"
+
+
+def stats_url(page: int) -> str:
+    return STATS_URL if page <= 1 else f"{STATS_URL}?page={page}"
 
 
 def versions_url(name: str) -> str:
@@ -218,15 +223,17 @@ class RubyGemsSpider(BrowserSpider):
 
         requests: list[Request] = []
         if popular_count > 0:
-            self._pending_discovery += 1
-            requests.append(
-                Request(
-                    STATS_URL,
-                    callback=self.parse_stats,
-                    errback=self.discovery_errback,
-                    meta={"rubygems_discovery": "popular", "selenium": False},
+            pages = max(1, -(-popular_count // STATS_PER_PAGE))
+            self._pending_discovery += pages
+            for page in range(1, pages + 1):
+                requests.append(
+                    Request(
+                        stats_url(page),
+                        callback=self.parse_stats,
+                        errback=self.discovery_errback,
+                        meta={"rubygems_discovery": "popular", "selenium": False},
+                    )
                 )
-            )
         else:
             self._popular_ready = True
 
@@ -254,7 +261,7 @@ class RubyGemsSpider(BrowserSpider):
             yield request
 
     def parse_stats(self, response: Response) -> Any:
-        self.popular = parse_stats_page(response)
+        self.popular.extend(parse_stats_page(response))
         self._popular_ready = True
         return self._discovery_finished()
 

@@ -34,6 +34,7 @@ TITLES = {
     "highest_potential_exposure": "Highest potential exposure",
     "data_completeness": "Data completeness",
     "collection_freshness": "Collection freshness",
+    "collection_errors": "Collection errors",
 }
 DESCRIPTIONS = {
     "sample_overview": "Sampled packages in the most recent successful run per ecosystem.",
@@ -49,6 +50,7 @@ DESCRIPTIONS = {
     "highest_potential_exposure": "Packages ranked by affected versions and by how often sampled packages declare them.",
     "data_completeness": "Field and dependency coverage for the sampled packages.",
     "collection_freshness": "Latest collector run per ecosystem, including failures.",
+    "collection_errors": "Failures recorded by the latest run of each ecosystem.",
 }
 FILTER_COLUMNS = ("ecosystem", "severity", "status", "category", "spider")
 SEVERITY_CLASSES = {"critical", "high", "moderate", "medium", "low", "unknown"}
