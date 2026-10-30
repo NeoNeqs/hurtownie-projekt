@@ -11,7 +11,10 @@ version-specific dependencies and OSV advisories across package ecosystems.
 
 **All seven ecosystems are implemented and pilot-verified:** npm, PyPI,
 crates.io, RubyGems, NuGet, Packagist, Hex. NVD is wired in as a CVSS/severity
-supplement for advisories that OSV imports without scores.
+supplement for advisories that OSV imports without scores. npm also has an
+official-registry-API fallback (`npm_registry`) for scale runs when the website
+serves a Cloudflare managed challenge; those rows are marked
+`collection_method="registry_api"`.
 
 **Commit state.** `dc7e905` contains the collection framework and the first five
 ecosystems. The NuGet and crates.io spiders, NVD enrichment, their fixtures and
@@ -30,6 +33,7 @@ docker compose up -d                     # postgres on localhost:55432
 # spider names: npm pypi crates rubygems nuget packagist hex
 .venv/bin/scrapy crawl nuget
 .venv/bin/scrapy crawl crates
+.venv/bin/scrapy crawl npm_registry   # API fallback when npmjs.com challenges
 
 .venv/bin/python -m warehouse.osv --ecosystem NuGet --delay 0.1
 .venv/bin/python -m warehouse.matching --ecosystem NuGet
@@ -62,7 +66,9 @@ Gotchas:
 - **crates.io is Selenium-only** (client-rendered Svelte). Every page needs the
   browser. Its list API answers 403 and the alphabetical pages stop around 200.
 - npm needs `BROWSER_HEADLESS=false` and a persistent `BROWSER_PROFILE_DIR` that
-  has already passed Cloudflare.
+  has already passed Cloudflare. A full-page “Just a moment…” managed challenge
+  cannot be cleared by the browser layer; use `npm_registry` for scale runs and
+  record the website run as `ChallengeBlocked`.
 
 ## Data currently in the database (pilot scale)
 

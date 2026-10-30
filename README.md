@@ -17,7 +17,8 @@ Implemented ecosystems: **npm**, **PyPI**, **crates.io**, **RubyGems**, **NuGet*
 | `warehouse/browser.py` | Selenium session, browser pool, challenge detection, cleanup |
 | `warehouse/middlewares.py` | Selenium downloader middleware and challenge handling |
 | `warehouse/spiders/base.py` | Shared spider request/error helpers |
-| `warehouse/spiders/npm.py` | npm discovery, metadata, versions, dependencies |
+| `warehouse/spiders/npm.py` | npm website discovery, metadata, versions, dependencies |
+| `warehouse/spiders/npm_registry.py` | npm registry-API fallback for scale runs (metadata, versions, dependencies) |
 | `warehouse/spiders/pypi.py` | PyPI discovery, metadata, release history |
 | `warehouse/spiders/rubygems.py` | RubyGems discovery, metadata, versions, dependencies |
 | `warehouse/spiders/crates.py` | crates.io SPA discovery, metadata, versions, dependencies |
@@ -59,6 +60,9 @@ is the default because headless Chrome is easier to fingerprint.
 ```bash
 # npm pilot: sample 25 popular and 5 random packages, 10 versions each
 .venv/bin/scrapy crawl npm
+
+# npm scale fallback through the official registry API (no browser)
+.venv/bin/scrapy crawl npm_registry
 
 # smaller pilot
 NPM_POPULAR_COUNT=4 NPM_RANDOM_COUNT=2 NPM_MAX_VERSIONS=3 \
@@ -207,7 +211,10 @@ package version. Affected ranges keep the advisory's own range rows, and
 
 - **npm popular**: search result pages sorted by monthly downloads, interleaved
   across queries so one query cannot fill the group. **Random**: short random
-  search terms, round-robin across queries, excluding popular packages.
+  search terms, round-robin across queries, excluding popular packages. The
+  `npm_registry` spider provides the same groups through the official registry
+  search API and sorts candidates by reported monthly downloads; it records
+  `collection_method="registry_api"`.
 - **PyPI popular**: the public top-pypi-packages dataset (monthly download
   ranking). **Random**: project sitemap shards chosen by seed.
 - **RubyGems popular**: the stats page (top gems by downloads). rubygems.org
@@ -241,8 +248,15 @@ pagination limits.
 - **PyPI dependencies are not collected.** pypi.org does not render
   per-release dependencies on the project page, and its JSON API is disallowed
   by robots.txt. PyPI rows therefore contribute metadata and versions only.
-- **npm version list is partial.** The versions tab renders about 120 rows, not
-  the full history. Sampling is therefore over the rendered window.
+- **npm version list is partial on the website.** The versions tab renders about
+  120 rows, not the full history. Sampling is therefore over the rendered
+  window.
+- **npm website challenges.** www.npmjs.com sometimes serves a full-page
+  Cloudflare managed challenge (“Just a moment…”). The browser layer waits and
+  records `ChallengeBlocked`; it does not bypass the challenge. For scale runs,
+  the `npm_registry` spider uses the official registry API instead and marks
+  those rows `collection_method="registry_api"`. The website collector remains
+  the primary scraping path and is still used for pilots.
 - **RubyGems dependencies are collected per selected version**, one extra page
   per version. Dependency pages list runtime and development dependencies;
   optionality is not exposed on the page and is stored as `false`.
