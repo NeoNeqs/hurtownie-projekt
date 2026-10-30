@@ -75,14 +75,36 @@ run_spider() {
     local spider="$1" ecosystem="$2" timeout_s="$3"
     shift 3
 
-    local started finished code status
+    local started finished code status timeout_pid monitor_pid
     started="$(date -Is)"
     log "$spider start (timeout ${timeout_s}s)"
 
     timeout --signal=TERM --kill-after=120 "$timeout_s" \
         env WAREHOUSE_DSN="$DSN" SCRAPY_LOG_LEVEL=INFO PYTHONUNBUFFERED=1 "$@" \
-        "$SCRAPY" crawl "$spider" >> "$RUN_DIR/$spider.log" 2>&1
+        "$SCRAPY" crawl "$spider" >> "$RUN_DIR/$spider.log" 2>&1 &
+    timeout_pid=$!
+
+    # Scrapy writes its own progress to the spider log, but the orchestrator log
+    # would otherwise stay silent until the whole ecosystem finishes. Mirror the
+    # latest logstats line once a minute so a long run is visibly alive.
+    (
+        while kill -0 "$timeout_pid" 2>/dev/null; do
+            sleep 60
+            if [ -f "$RUN_DIR/$spider.log" ]; then
+                line="$(grep -E 'Crawled [0-9]+ pages' "$RUN_DIR/$spider.log" | tail -1 || true)"
+                if [ -n "$line" ]; then
+                    printf '%s %s progress: %s\n' "$(date -Is)" "$spider" "$line" \
+                        >> "$RUN_DIR/driver.log"
+                fi
+            fi
+        done
+    ) &
+    monitor_pid=$!
+
+    wait "$timeout_pid"
     code=$?
+    kill "$monitor_pid" 2>/dev/null || true
+    wait "$monitor_pid" 2>/dev/null || true
     finished="$(date -Is)"
 
     case "$code" in
