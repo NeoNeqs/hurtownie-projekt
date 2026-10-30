@@ -36,6 +36,9 @@ docker compose up -d                     # postgres on localhost:55432
 .venv/bin/python -m warehouse.nvd --limit 100   # optional, needs network
 .venv/bin/python analysis/run_queries.py
 .venv/bin/python analysis/build_dashboard.py   # output/dashboard.html
+
+# moderate scale-up across all seven ecosystems, then OSV, matching and report
+scripts/scale_collection.sh
 ```
 
 Gotchas:
@@ -92,7 +95,9 @@ the sample postdates the fixed ranges). It is not a matching bug.
   random from seeded sitemap shards, project page metadata, release history.
   No dependencies: pypi.org renders none and its JSON API is robots-disallowed.
 - `warehouse/spiders/rubygems.py` — stats page, seeded alphabetical index pages,
-  gem page, versions page, per-version dependency pages.
+  gem page, versions page, per-version dependency pages. The stats pages expose
+  only the top 100 gems; later pages redirect to page 1, so the spider caps the
+  popular group there.
 - `warehouse/spiders/hex.py` — download-sorted and alphabetical indexes, package
   page, versions page, per-version dependency pages. No license, no dev deps.
 - `warehouse/spiders/packagist.py` — explore pages, seeded names from
