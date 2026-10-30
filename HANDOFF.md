@@ -25,7 +25,7 @@ this paragraph is current.
 docker compose up -d                     # postgres on localhost:55432
 .venv/bin/python -m warehouse.db init    # create db + apply migrations + seed ecosystems
 
-.venv/bin/python -m pytest               # 114 passed
+.venv/bin/python -m pytest               # 118 passed
 
 # spider names: npm pypi crates rubygems nuget packagist hex
 .venv/bin/scrapy crawl nuget
@@ -35,6 +35,7 @@ docker compose up -d                     # postgres on localhost:55432
 .venv/bin/python -m warehouse.matching --ecosystem NuGet
 .venv/bin/python -m warehouse.nvd --limit 100   # optional, needs network
 .venv/bin/python analysis/run_queries.py
+.venv/bin/python analysis/build_dashboard.py   # output/dashboard.html
 ```
 
 Gotchas:
@@ -126,31 +127,35 @@ the sample postdates the fixed ranges). It is not a matching bug.
 
 **Analysis and docs**
 
-- `analysis/queries.sql` + `analysis/run_queries.py` — 11 queries with documented
+- `analysis/queries.sql` + `analysis/run_queries.py` — 13 queries with documented
   denominators, now covering all seven spiders.
-- `README.md` — setup, run commands, sampling per ecosystem, data dictionary,
-  limitations, testing.
+- `analysis/build_dashboard.py` — writes a self-contained `output/dashboard.html`
+  with sample cards, row filters, severity badges, completeness and freshness.
+  Every section is one named query, so figures stay traceable to SQL.
+- `README.md` — setup, run commands, sampling per ecosystem, dashboard, data
+  dictionary, limitations, testing.
 
 ## Verification state
 
-- `.venv/bin/python -m pytest` → **114 passed** (fixtures only, offline).
+- `.venv/bin/python -m pytest` → **118 passed** (fixtures only, offline).
 - Every spider has a successful pilot run recorded in `collection_run`.
 - OSV ingestion and `warehouse.matching` ran for all seven ecosystems.
 - NVD enrichment ran against the live API and filled two CVSS 3.1 scores.
-- All 11 analysis queries execute with exit code 0.
+- All 13 analysis queries execute with exit code 0.
+- `analysis/build_dashboard.py` renders all 13 queries into `output/dashboard.html`.
 - `compileall` over `warehouse/`, `analysis/`, `tests/` is clean.
 
 ## Remaining work (rough priority order)
 
 1. **Scale up** — pilots are 3–12 packages per ecosystem; the target is ~2,500.
-   Needs longer runs plus measurement of blocking and field-completeness rates.
+   Needs longer runs plus measurement of blocking and field-completeness rates,
+   then rebuild the dashboard.
 2. **Resolved dependency graph** — stored constraints are declared ranges, not
    an install graph.
-3. **Dashboard** over the analysis queries.
-4. **PyPI dependencies** — blocked by robots.txt; decide whether metadata +
+3. **PyPI dependencies** — blocked by robots.txt; decide whether metadata +
    versions is acceptable or whether to ask the site owner.
-5. **Random-sample coverage** — reproducible per seed but not uniform:
+4. **Random-sample coverage** — reproducible per seed but not uniform:
    alphabetical indexes, sitemap letter ranges, search terms, and the NuGet /
    crates.io pagination limits.
-6. **OSV freshness** — advisories are upserted, never deleted; rerun ingestion
+5. **OSV freshness** — advisories are upserted, never deleted; rerun ingestion
    periodically and consider tracking withdrawn advisories.

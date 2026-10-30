@@ -414,3 +414,81 @@ JOIN version_vulnerability vv
 GROUP BY s.ecosystem, s.ecosystem_id, s.normalized_name, p.name
 ORDER BY exposure_score DESC, affected_advisories DESC
 LIMIT 20;
+
+-- name: data_completeness
+-- Field and dependency coverage for the sampled packages in the latest run.
+-- Downloads come from download_observation because package metadata keeps no
+-- current count; a package counts as covered when at least one observation
+-- exists.
+WITH latest_run AS (
+    SELECT DISTINCT ON (source) id, source
+    FROM collection_run
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
+      AND status IN ('succeeded', 'partial')
+    ORDER BY source, started_at DESC
+), sample AS (
+    SELECT sp.package_id, e.name AS ecosystem
+    FROM sampled_package sp
+    JOIN latest_run r ON r.id = sp.collection_run_id
+    JOIN package p ON p.id = sp.package_id
+    JOIN ecosystem e ON e.id = p.ecosystem_id
+)
+SELECT s.ecosystem,
+       count(*) AS sampled_packages,
+       round(100.0 * count(*) FILTER (
+           WHERE coalesce(p.description, '') <> ''
+       ) / count(*), 1) AS description_pct,
+       round(100.0 * count(*) FILTER (
+           WHERE coalesce(p.license, '') <> ''
+       ) / count(*), 1) AS license_pct,
+       round(100.0 * count(*) FILTER (
+           WHERE coalesce(p.repository_url, '') <> ''
+       ) / count(*), 1) AS repository_pct,
+       round(100.0 * count(*) FILTER (
+           WHERE EXISTS (
+               SELECT 1 FROM download_observation d WHERE d.package_id = p.id
+           )
+       ) / count(*), 1) AS downloads_pct,
+       coalesce(sum(v.version_count), 0) AS versions,
+       round(avg(v.version_count)::numeric, 1) AS avg_versions_per_package,
+       count(*) FILTER (WHERE v.version_count > 0) AS packages_with_versions,
+       coalesce(sum(v.dependency_versions), 0) AS versions_with_dependencies
+FROM sample s
+JOIN package p ON p.id = s.package_id
+LEFT JOIN LATERAL (
+    SELECT count(*) AS version_count,
+           count(*) FILTER (
+               WHERE EXISTS (
+                   SELECT 1 FROM dependency d
+                   WHERE d.package_version_id = pv.id
+               )
+           ) AS dependency_versions
+    FROM package_version pv
+    WHERE pv.package_id = p.id
+) v ON true
+GROUP BY s.ecosystem
+ORDER BY s.ecosystem;
+
+-- name: collection_freshness
+-- Latest collector run per source, including failures, so stale or blocked
+-- ecosystems are visible next to the analysis results.
+WITH latest AS (
+    SELECT DISTINCT ON (source) *
+    FROM collection_run
+    WHERE spider IN ('npm', 'pypi', 'rubygems', 'hex', 'packagist', 'nuget', 'crates')
+    ORDER BY source, started_at DESC
+)
+SELECT CASE spider
+           WHEN 'pypi' THEN 'PyPI'
+           WHEN 'crates' THEN 'crates.io'
+           WHEN 'rubygems' THEN 'RubyGems'
+           WHEN 'nuget' THEN 'NuGet'
+           WHEN 'packagist' THEN 'Packagist'
+           WHEN 'hex' THEN 'Hex'
+           ELSE spider
+       END AS ecosystem,
+       source, spider, status, started_at, finished_at,
+       items_stored, items_rejected, errors,
+       now() - started_at AS age
+FROM latest
+ORDER BY ecosystem;

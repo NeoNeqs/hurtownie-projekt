@@ -33,6 +33,7 @@ Implemented ecosystems: **npm**, **PyPI**, **crates.io**, **RubyGems**, **NuGet*
 | `warehouse/migrations/` | Repeatable schema migrations |
 | `analysis/queries.sql` | Analytical SQL with documented denominators |
 | `analysis/run_queries.py` | Executes the analytical queries |
+| `analysis/build_dashboard.py` | Renders the queries as a static HTML dashboard |
 
 ## Setup
 
@@ -125,11 +126,20 @@ treated as proof that a package is safe.
 ```bash
 .venv/bin/python analysis/run_queries.py
 .venv/bin/python analysis/run_queries.py --query packages_with_vulnerability
+
+.venv/bin/python analysis/build_dashboard.py          # output/dashboard.html
+.venv/bin/python analysis/build_dashboard.py --output /tmp/report.html
 ```
 
 Each query starts from the latest successful run per ecosystem and defines its
 denominator. Results are based on collected versions only, and dependencies are
 declared constraints rather than a resolved install graph.
+
+The dashboard is a single self-contained HTML file. Every section is one named
+query, and the page includes row filters, sample sizes, vulnerability shares,
+severity mix, dependency exposure, field completeness and collection freshness.
+It needs no server; open `output/dashboard.html` in a browser. Rebuild it after
+new collections so the figures match the current database.
 
 ## Data dictionary
 
