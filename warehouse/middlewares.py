@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from typing import Any
 
 from scrapy import signals
 from scrapy.crawler import Crawler
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
 from scrapy.http import HtmlResponse, Request, Response
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from twisted.internet.threads import deferToThread
@@ -13,6 +15,37 @@ from twisted.internet.threads import deferToThread
 from warehouse.browser import BrowserManager, BrowserOptions
 
 logger = logging.getLogger(__name__)
+
+RATE_LIMIT_STATUS = 429
+RATE_LIMIT_COOLDOWN_SECONDS = float(os.getenv("NPM_RETRY_COOLDOWN_SECONDS", "600") or 600)
+
+
+class NpmRateLimitRetryMiddleware(RetryMiddleware):
+    """Rate-limit aware retry for npm crawlers.
+
+    npm answers crawlers with ``{"message":"Too Many Requests", ...}`` when a
+    crawl gets chatty. Scrapy's default retry re-queues immediately, so this
+    subclass sleeps a cool-down before re-trying after a rate-limit response.
+    """
+
+    def __init__(self, settings: Any) -> None:
+        super().__init__(settings)
+        self._cool_down_pending = False
+
+    def _retry(self, request: Request, reason: Any) -> Request | None:
+        if getattr(self, "_cool_down_pending", False):
+            time.sleep(RATE_LIMIT_COOLDOWN_SECONDS)
+            self._cool_down_pending = False
+        return super()._retry(request, reason)
+
+    def process_response(self, request: Request, response: Response, spider: Any) -> Any:
+        if (
+            response.status == RATE_LIMIT_STATUS
+            and not request.meta.get("dont_retry", False)
+        ):
+            # Rate limited: arm the cool-down; the retry will pause first.
+            self._cool_down_pending = True
+        return super().process_response(request, response, spider)
 
 
 class SeleniumMiddleware:

@@ -92,6 +92,8 @@ BROWSER_OPTIONS = {
 
 DOWNLOADER_MIDDLEWARES = {
     "warehouse.middlewares.SeleniumMiddleware": 543,
+    # npm rate-limit aware retry: cool down (default 10 min) before re-trying 429.
+    "warehouse.middlewares.NpmRateLimitRetryMiddleware": 560,
 }
 
 ITEM_PIPELINES = {
