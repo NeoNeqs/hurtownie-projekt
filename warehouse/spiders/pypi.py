@@ -2,9 +2,15 @@
 
 Discovery uses the published project sitemap for the random comparison group
 and the public top-PyPI-packages dataset for the popular group. Metadata and
-release history come from the project page itself. PyPI does not render
-per-release dependencies on the website, so dependency rows are not collected
-for this ecosystem yet.
+release history come from the project page itself.
+
+PyPI does not render per-release dependencies on the website, and both the
+``/simple/`` index and the JSON API are disallowed by robots.txt. Dependencies
+therefore come from PEP 658 ``.metadata`` sidecars: for each sampled version the
+collector reads the wheel URL from the version page's file table and requests
+``<wheel-url>.metadata`` from files.pythonhosted.org. That host serves the same
+metadata pip uses; sdist-only releases have no sidecar and keep empty
+dependencies.
 
 Fastly serves an uncached project page behind a "Client Challenge"
 interstitial. It is treated as a block, not something to work around: those
@@ -19,8 +25,9 @@ import re
 from collections.abc import AsyncIterator
 from datetime import datetime, timezone
 from typing import Any
-from urllib.parse import unquote, urlparse
+from urllib.parse import quote, unquote, urlparse
 
+from packaging.requirements import InvalidRequirement, Requirement
 from scrapy import Request
 from scrapy.http import Response
 
@@ -40,6 +47,49 @@ HOMEPAGE_LABELS = {"homepage", "home page", "documentation", "docs", "website"}
 
 def package_url(name: str) -> str:
     return f"{BASE_URL}{PROJECT_PREFIX}{name}/"
+
+
+def version_url(name: str, version: str) -> str:
+    return (
+        f"{BASE_URL}{PROJECT_PREFIX}{quote(name, safe='')}/"
+        f"{quote(version, safe='')}/#files"
+    )
+
+
+def parse_wheel_url(response: Response) -> str | None:
+    """Return a wheel URL from a version page's file table, if one exists."""
+    for href in response.xpath(
+        "//table[contains(@class, 'table--files')]"
+        "//a[contains(@href, 'files.pythonhosted.org')"
+        " and contains(@href, '.whl')]/@href"
+    ).getall():
+        if href.startswith("https://"):
+            return href
+    return None
+
+
+def parse_requires_dist(payload: str) -> list[dict[str, Any]]:
+    """Parse ``Requires-Dist`` lines from a PEP 658 metadata sidecar."""
+    dependencies: list[dict[str, Any]] = []
+    for line in payload.splitlines():
+        if not line.lower().startswith("requires-dist:"):
+            continue
+        value = line.split(":", 1)[1].strip()
+        try:
+            requirement = Requirement(value)
+        except InvalidRequirement:
+            continue
+        marker = str(requirement.marker or "")
+        optional = "extra" in marker
+        dependencies.append(
+            {
+                "name": requirement.name,
+                "constraint": str(requirement.specifier) or None,
+                "dependency_type": "optional" if optional else "runtime",
+                "optional": optional,
+            }
+        )
+    return dependencies
 
 
 def package_name_from_url(url: str) -> str | None:
@@ -162,6 +212,7 @@ class PyPISpider(BrowserSpider):
         self._scheduled = False
         self._popular_ready = False
         self._random_ready = False
+        self._drafts: dict[str, dict[str, Any]] = {}
 
     async def start(self) -> AsyncIterator[Request]:
         popular_count = self.settings.getint("PYPI_POPULAR_COUNT", 25)
@@ -361,30 +412,127 @@ class PyPISpider(BrowserSpider):
         for entry in selected:
             entry["dependencies"] = []
 
+        draft = {
+            "name": name,
+            "category": response.meta["pypi_category"],
+            "rank": response.meta["pypi_rank"],
+            "seed": response.meta["pypi_seed"],
+            "downloads": response.meta.get("pypi_downloads"),
+            "source_url": response.url,
+            "metadata": metadata,
+            "versions": selected,
+            "first_published_at": min(dates) if dates else None,
+            "latest_published_at": latest_published,
+            "latest_version": latest or (versions[0]["version"] if versions else None),
+            "pending": 0,
+        }
+        self._drafts[name.lower()] = draft
+        if not selected:
+            return self._finish(draft)
+
+        requests = []
+        for entry in selected:
+            draft["pending"] += 1
+            requests.append(
+                self.browser_request(
+                    version_url(name, entry["version"]),
+                    callback=self.parse_version_files,
+                    errback=self.version_errback,
+                    meta={
+                        "pypi_key": name.lower(),
+                        "pypi_version": entry["version"],
+                        "selenium_wait_for": "table.table--files",
+                    },
+                )
+            )
+        return requests
+
+    def parse_version_files(self, response: Response) -> Any:
+        draft = self._drafts.get(response.meta.get("pypi_key"))
+        if draft is None:
+            return None
+
+        version = response.meta["pypi_version"]
+        entry = next(
+            (item for item in draft["versions"] if item["version"] == version), None
+        )
+        wheel_url = parse_wheel_url(response)
+
+        if entry is None or wheel_url is None:
+            # Sdist-only releases have no PEP 658 sidecar, so empty dependencies
+            # are the correct result rather than a collection error.
+            draft["pending"] -= 1
+            return self._finish(draft) if draft["pending"] <= 0 else None
+
+        return Request(
+            f"{wheel_url}.metadata",
+            callback=self.parse_version_metadata,
+            errback=self.metadata_errback,
+            meta={
+                "pypi_key": response.meta["pypi_key"],
+                "pypi_version": version,
+                "selenium": False,
+            },
+        )
+
+    def parse_version_metadata(self, response: Response) -> Any:
+        draft = self._drafts.get(response.meta.get("pypi_key"))
+        if draft is None:
+            return None
+
+        version = response.meta["pypi_version"]
+        entry = next(
+            (item for item in draft["versions"] if item["version"] == version), None
+        )
+        if entry is not None:
+            entry["dependencies"] = parse_requires_dist(response.text)
+
+        draft["pending"] -= 1
+        return self._finish(draft) if draft["pending"] <= 0 else None
+
+    def version_errback(self, failure: Any) -> Any:
+        super().errback(failure)
+        draft = self._drafts.get(failure.request.meta.get("pypi_key"))
+        if draft is None:
+            return None
+        draft["pending"] -= 1
+        return self._finish(draft) if draft["pending"] <= 0 else None
+
+    def metadata_errback(self, failure: Any) -> Any:
+        super().errback(failure)
+        draft = self._drafts.get(failure.request.meta.get("pypi_key"))
+        if draft is None:
+            return None
+        draft["pending"] -= 1
+        return self._finish(draft) if draft["pending"] <= 0 else None
+
+    def _finish(self, draft: dict[str, Any]) -> Any:
+        self._drafts.pop(draft["name"].lower(), None)
+        metadata = draft["metadata"]
         item = self.load_package(
             {
                 "ecosystem": self.ecosystem,
-                "name": name,
-                "sampling_category": response.meta["pypi_category"],
-                "sampling_rank": response.meta["pypi_rank"],
-                "sampling_seed": response.meta["pypi_seed"],
+                "name": draft["name"],
+                "sampling_category": draft["category"],
+                "sampling_rank": draft["rank"],
+                "sampling_seed": draft["seed"],
                 "description": metadata.get("description"),
                 "homepage_url": metadata.get("homepage_url"),
                 "repository_url": metadata.get("repository_url"),
                 "license": metadata.get("license"),
-                "latest_version": latest or (versions[0]["version"] if versions else None),
-                "first_published_at": min(dates) if dates else None,
-                "latest_published_at": latest_published,
-                "downloads": response.meta.get("pypi_downloads"),
+                "latest_version": draft["latest_version"],
+                "first_published_at": draft["first_published_at"],
+                "latest_published_at": draft["latest_published_at"],
+                "downloads": draft["downloads"],
                 "downloads_period": "last-month",
                 "source": self.source,
-                "source_url": response.url,
+                "source_url": draft["source_url"],
                 "collection_method": "selenium",
                 "collected_at": datetime.now(timezone.utc),
             }
         )
         item["versions"] = sorted(
-            selected,
+            draft["versions"],
             key=lambda entry: entry.get("published_at")
             or datetime.min.replace(tzinfo=timezone.utc),
             reverse=True,

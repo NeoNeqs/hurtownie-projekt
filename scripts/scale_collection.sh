@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
-# Moderate scale-up run: several hundred packages per ecosystem, then OSV
-# ingestion, vulnerability matching and the analysis report.
+# Scale-up run: 2,000 popular plus 500 random packages per ecosystem, then OSV
+# ingestion, vulnerability matching and the analysis report. RubyGems is capped
+# at 100 popular because rubygems.org only publishes ten stats pages.
 #
 # The run is deliberately sequential: every Selenium ecosystem shares one
 # browser pool, and hammering seven sites at once would make blocking results
@@ -17,8 +18,18 @@
 #   SCALE_ECOSYSTEMS   space-separated subset to run (default: all seven);
 #                      useful for resuming after an interrupted run
 #   SCALE_TIMEOUT_HTTP seconds per HTTP-only ecosystem (default: 10800 = 3 h)
-#   SCALE_TIMEOUT_BROWSER seconds per Selenium ecosystem (default: 21600 = 6 h)
+#   SCALE_TIMEOUT_BROWSER seconds per Selenium ecosystem (default: 21600 = 6 h);
+#                      npm is not timed out at all, so it can wait out rate
+#                      limits and Cloudflare challenges instead of failing
 #   SCALE_MAX_VERSIONS versions sampled per package (default: 5)
+#   SCALE_POPULAR_COUNT popular packages per ecosystem (default: 2000)
+#   SCALE_RANDOM_COUNT  random comparison packages per ecosystem (default: 500)
+#   SCALE_RANDOM_PAGES  index/search pages used for the random group
+#                       (default: 25, enough for 500 names at 20 per page)
+#
+# Every ecosystem is collected from its public website. The npm registry API is
+# not used, even as a fallback: this warehouse records what the sites publish,
+# not what an API returns, except for OSV/NVD advisory data.
 
 set -u
 
@@ -30,6 +41,9 @@ RUN_DIR="${SCALE_RUN_DIR:-output/scale-$(date +%Y%m%d-%H%M%S)}"
 TIMEOUT_HTTP="${SCALE_TIMEOUT_HTTP:-10800}"
 TIMEOUT_BROWSER="${SCALE_TIMEOUT_BROWSER:-21600}"
 MAX_VERSIONS="${SCALE_MAX_VERSIONS:-5}"
+POPULAR_COUNT="${SCALE_POPULAR_COUNT:-2000}"
+RANDOM_COUNT="${SCALE_RANDOM_COUNT:-500}"
+RANDOM_PAGES="${SCALE_RANDOM_PAGES:-25}"
 PYTHON="$ROOT/.venv/bin/python"
 SCRAPY="$ROOT/.venv/bin/scrapy"
 
@@ -55,7 +69,7 @@ fi
 
 log "run directory: $RUN_DIR"
 log "dsn: $DSN"
-log "max versions per package: $MAX_VERSIONS"
+log "sample target: ${POPULAR_COUNT} popular + ${RANDOM_COUNT} random, ${MAX_VERSIONS} versions each"
 
 # Make the schema idempotent so a fresh machine can run this unattended.
 if ! env WAREHOUSE_DSN="$DSN" "$PYTHON" -m warehouse.db init >> "$RUN_DIR/db-init.log" 2>&1; then
@@ -85,9 +99,13 @@ run_spider() {
     local spider="$1" ecosystem="$2" timeout_s="$3"
     shift 3
 
-    local started finished code status timeout_pid monitor_pid
+    local started finished code status timeout_pid monitor_pid scraped
     started="$(date -Is)"
-    log "$spider start (timeout ${timeout_s}s)"
+    if [ "$timeout_s" -eq 0 ]; then
+        log "$spider start (no timeout; waits out rate limits)"
+    else
+        log "$spider start (timeout ${timeout_s}s)"
+    fi
 
     timeout --signal=TERM --kill-after=120 "$timeout_s" \
         env WAREHOUSE_DSN="$DSN" SCRAPY_LOG_LEVEL=INFO PYTHONUNBUFFERED=1 "$@" \
@@ -123,9 +141,22 @@ run_spider() {
         *) status="failed" ;;
     esac
 
+    # Scrapy exits 0 even when every request failed, so an empty feed would
+    # otherwise look like a successful collection.
+    scraped="$(grep -o "'item_scraped_count': [0-9]*" "$RUN_DIR/$spider.log" 2>/dev/null \
+        | tail -1 | grep -o '[0-9]*$' || true)"
+    if [ "$code" -eq 0 ] && [ "${scraped:-1}" -eq 0 ]; then
+        status="failed"
+    fi
+
     printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
         "$started" "$finished" "$spider" "$ecosystem" "$status" "$code" >> "$SUMMARY"
-    log "$spider finished status=$status exit=$code"
+    log "$spider finished status=$status exit=$code${scraped:+ scraped=$scraped}"
+
+    if [ "${scraped:-1}" -eq 0 ]; then
+        log "$spider stored no items; skipping OSV ingestion and matching"
+        return
+    fi
 
     # Partial runs still stored packages, and both commands are idempotent.
     run_osv_and_matching "$spider" "$ecosystem"
@@ -134,22 +165,22 @@ run_spider() {
 if should_run nuget; then
     log "=== NuGet"
     run_spider nuget NuGet "$TIMEOUT_HTTP" \
-        NUGET_POPULAR_COUNT=250 NUGET_RANDOM_COUNT=50 NUGET_RANDOM_PAGES=10 \
-        NUGET_MAX_VERSIONS="$MAX_VERSIONS"
+        NUGET_POPULAR_COUNT="$POPULAR_COUNT" NUGET_RANDOM_COUNT="$RANDOM_COUNT" \
+        NUGET_RANDOM_PAGES="$RANDOM_PAGES" NUGET_MAX_VERSIONS="$MAX_VERSIONS"
 fi
 
 if should_run pypi; then
     log "=== PyPI"
     run_spider pypi PyPI "$TIMEOUT_HTTP" \
-        PYPI_POPULAR_COUNT=250 PYPI_RANDOM_COUNT=50 PYPI_SITEMAP_SHARDS=10 \
-        PYPI_MAX_VERSIONS="$MAX_VERSIONS"
+        PYPI_POPULAR_COUNT="$POPULAR_COUNT" PYPI_RANDOM_COUNT="$RANDOM_COUNT" \
+        PYPI_SITEMAP_SHARDS=10 PYPI_MAX_VERSIONS="$MAX_VERSIONS"
 fi
 
 if should_run packagist; then
     log "=== Packagist"
     run_spider packagist Packagist "$TIMEOUT_BROWSER" \
         BROWSER_HEADLESS=true \
-        PACKAGIST_POPULAR_COUNT=250 PACKAGIST_RANDOM_COUNT=50 \
+        PACKAGIST_POPULAR_COUNT="$POPULAR_COUNT" PACKAGIST_RANDOM_COUNT="$RANDOM_COUNT" \
         PACKAGIST_MAX_VERSIONS="$MAX_VERSIONS"
 fi
 
@@ -157,24 +188,26 @@ if should_run hex; then
     log "=== Hex"
     run_spider hex Hex "$TIMEOUT_BROWSER" \
         BROWSER_HEADLESS=true \
-        HEX_POPULAR_COUNT=250 HEX_RANDOM_COUNT=50 HEX_RANDOM_PAGES=10 \
-        HEX_MAX_VERSIONS="$MAX_VERSIONS"
+        HEX_POPULAR_COUNT="$POPULAR_COUNT" HEX_RANDOM_COUNT="$RANDOM_COUNT" \
+        HEX_RANDOM_PAGES="$RANDOM_PAGES" HEX_MAX_VERSIONS="$MAX_VERSIONS"
 fi
 
 if should_run rubygems; then
     log "=== RubyGems (stats pages cap the popular group at 100)"
     run_spider rubygems RubyGems "$TIMEOUT_BROWSER" \
         BROWSER_HEADLESS=true \
-        RUBYGEMS_POPULAR_COUNT=100 RUBYGEMS_RANDOM_COUNT=50 RUBYGEMS_RANDOM_PAGES=10 \
-        RUBYGEMS_MAX_VERSIONS="$MAX_VERSIONS"
+        RUBYGEMS_POPULAR_COUNT=100 RUBYGEMS_RANDOM_COUNT="$RANDOM_COUNT" \
+        RUBYGEMS_RANDOM_PAGES="$RANDOM_PAGES" RUBYGEMS_MAX_VERSIONS="$MAX_VERSIONS"
 fi
 
 if should_run npm; then
-    log "=== npm (headed Chrome for Cloudflare)"
-    run_spider npm npm "$TIMEOUT_BROWSER" \
+    log "=== npm website (headed Chrome, warmed profile)"
+    # Use the default persistent profile (~/.cache/hurtownie/chrome-profile).
+    # Overriding it with a fresh path throws away cf_clearance and guarantees
+    # a Cloudflare challenge on every run.
+    run_spider npm npm 0 \
         BROWSER_HEADLESS=false \
-        BROWSER_PROFILE_DIR="${BROWSER_PROFILE_DIR:-/tmp/opencode/chrome-npm-profile}" \
-        NPM_POPULAR_COUNT=250 NPM_RANDOM_COUNT=50 \
+        NPM_POPULAR_COUNT="$POPULAR_COUNT" NPM_RANDOM_COUNT="$RANDOM_COUNT" \
         NPM_SEARCH_QUERIES="framework,http,cli,testing,react,vue,express,webpack,typescript,build,api,ui" \
         NPM_MAX_VERSIONS="$MAX_VERSIONS"
 fi
@@ -183,8 +216,9 @@ if should_run crates; then
     log "=== crates.io (Selenium, slowest, runs last)"
     run_spider crates crates.io "$TIMEOUT_BROWSER" \
         BROWSER_HEADLESS=true \
-        CRATES_POPULAR_COUNT=250 CRATES_RANDOM_COUNT=50 CRATES_RANDOM_PAGES=10 \
-        CRATES_VERSION_PAGES=1 CRATES_MAX_VERSIONS="$MAX_VERSIONS"
+        CRATES_POPULAR_COUNT="$POPULAR_COUNT" CRATES_RANDOM_COUNT="$RANDOM_COUNT" \
+        CRATES_RANDOM_PAGES="$RANDOM_PAGES" CRATES_VERSION_PAGES=1 \
+        CRATES_MAX_VERSIONS="$MAX_VERSIONS"
 fi
 
 log "=== analysis"

@@ -1,6 +1,6 @@
 # Session handoff — package security warehouse
 
-State as of 2026-10-30. Read this first, then `README.md` for commands and the
+State as of 2026-10-31. Read this first, then `README.md` for commands and the
 data dictionary, and `implementation_todo_package_security_warehouse.md` for the
 original spec.
 
@@ -11,16 +11,15 @@ version-specific dependencies and OSV advisories across package ecosystems.
 
 **All seven ecosystems are implemented and pilot-verified:** npm, PyPI,
 crates.io, RubyGems, NuGet, Packagist, Hex. NVD is wired in as a CVSS/severity
-supplement for advisories that OSV imports without scores. npm also has an
-official-registry-API fallback (`npm_registry`) for scale runs when the website
-serves a Cloudflare managed challenge; those rows are marked
-`collection_method="registry_api"`.
+supplement for advisories that OSV imports without scores. Collection is
+website-only; the `npm_registry` module is an experimental leftover and is not
+part of the pipeline.
 
-**Commit state.** `dc7e905` contains the collection framework and the first five
-ecosystems. The NuGet and crates.io spiders, NVD enrichment, their fixtures and
-tests, and the documentation updates in this working tree were committed
-separately at the end of the 2026-10-30 session. Check `git log` before assuming
-this paragraph is current.
+**Commit state.** `a409657` is the last commit on `master`; it keeps npm
+rate-limited requests retrying after the cool-down. The branch is ahead of
+`origin/master`, so check `git log` and `git status` before assuming the remote
+matches. The scale orchestrator and documentation also have uncommitted edits in
+the working tree.
 
 ## How to run everything
 
@@ -28,12 +27,12 @@ this paragraph is current.
 docker compose up -d                     # postgres on localhost:55432
 .venv/bin/python -m warehouse.db init    # create db + apply migrations + seed ecosystems
 
-.venv/bin/python -m pytest               # 118 passed
+.venv/bin/python -m pytest               # 139 passed
 
 # spider names: npm pypi crates rubygems nuget packagist hex
 .venv/bin/scrapy crawl nuget
 .venv/bin/scrapy crawl crates
-.venv/bin/scrapy crawl npm_registry   # API fallback when npmjs.com challenges
+.venv/bin/scrapy crawl npm
 
 .venv/bin/python -m warehouse.osv --ecosystem NuGet --delay 0.1
 .venv/bin/python -m warehouse.matching --ecosystem NuGet
@@ -41,7 +40,7 @@ docker compose up -d                     # postgres on localhost:55432
 .venv/bin/python analysis/run_queries.py
 .venv/bin/python analysis/build_dashboard.py   # output/dashboard.html
 
-# moderate scale-up across all seven ecosystems, then OSV, matching and report
+# full scale-up across all seven ecosystems, then OSV, matching and report
 scripts/scale_collection.sh
 ```
 
@@ -65,12 +64,13 @@ Gotchas:
   remove that.
 - **crates.io is Selenium-only** (client-rendered Svelte). Every page needs the
   browser. Its list API answers 403 and the alphabetical pages stop around 200.
-- npm needs `BROWSER_HEADLESS=false` and a persistent `BROWSER_PROFILE_DIR` that
-  has already passed Cloudflare. A full-page “Just a moment…” managed challenge
-  cannot be cleared by the browser layer; use `npm_registry` for scale runs and
-  record the website run as `ChallengeBlocked`.
+- npm needs `BROWSER_HEADLESS=false` and the persistent default profile at
+  `~/.cache/hurtownie/chrome-profile`, which keeps `cf_clearance` between runs.
+  A full-page “Just a moment…” managed challenge cannot be cleared by the
+  browser layer; record the run as `ChallengeBlocked` and leave it failed. Do
+  not substitute the registry API.
 
-## Data currently in the database (pilot scale)
+## Pilot data (2026-10-30, not the current database state)
 
 | ecosystem | packages | popular | random | versions | dependencies | vv rows | affected |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -88,6 +88,35 @@ Totals: 40 packages (27 popular, 13 random), 112 versions, 832 dependencies,
 RubyGems/Hex/Packagist/crates.io show no matched advisories because their OSV
 batches returned none for the sampled versions (RubyGems was checked by hand:
 the sample postdates the fixed ranges). It is not a matching bug.
+
+## Scale attempt (2026-10-30)
+
+`output/scale-20261030-122225` is incomplete:
+
+| spider | result |
+| --- | --- |
+| nuget, pypi, packagist, hex, rubygems | succeeded |
+| npm (website) | stored 0 packages; recorded as failed |
+| npm_registry (manual run, API) | 300 packages, 1463 versions, 871 affected; ended partial after HTTP 429s. This run is outside the collection policy and should not be merged with website data. |
+| crates | killed after 43 packages; no summary row |
+| analysis/report/dashboard | never ran; no `report.md` or `dashboard.html` |
+
+The script previously hardcoded 250 popular + 50 random and now defaults to the
+2,500-package target (2,000 + 500). It marks an exit-0 run that stored no items
+as failed before skipping OSV and matching. npm always runs the website spider;
+the registry API is not used, even when the website is challenged.
+
+The npm retry/cooldown middleware is covered by unit tests. A live npm website
+pilot on 2026-10-31 cleared five challenges and stored one package with 14
+dependencies, using the default profile at `~/.cache/hurtownie/chrome-profile`.
+A live PyPI pilot on the same day collected one package, two versions and their
+PEP 658 dependencies, so both paths work.
+
+The rate-limit middleware honours `Retry-After`, backs off exponentially from
+600 s to 3,600 s with jitter, and by default retries forever, waiting until the
+site lets the crawler back in. `NPM_RETRY_MAX_ATTEMPTS` and
+`NPM_RETRY_MAX_TOTAL_COOLDOWN_SECONDS` can bound that if needed. Sleeps are
+sliced so Ctrl+C still stops the crawl.
 
 ## What each module does
 
@@ -148,7 +177,7 @@ the sample postdates the fixed ranges). It is not a matching bug.
 
 ## Verification state
 
-- `.venv/bin/python -m pytest` → **118 passed** (fixtures only, offline).
+- `.venv/bin/python -m pytest` → **139 passed** (fixtures only, offline).
 - Every spider has a successful pilot run recorded in `collection_run`.
 - OSV ingestion and `warehouse.matching` ran for all seven ecosystems.
 - NVD enrichment ran against the live API and filled two CVSS 3.1 scores.
@@ -158,15 +187,23 @@ the sample postdates the fixed ranges). It is not a matching bug.
 
 ## Remaining work (rough priority order)
 
-1. **Scale up** — pilots are 3–12 packages per ecosystem; the target is ~2,500.
-   Needs longer runs plus measurement of blocking and field-completeness rates,
-   then rebuild the dashboard.
-2. **Resolved dependency graph** — stored constraints are declared ranges, not
+1. **Finish the scale run** — resume npm and crates into
+   `output/scale-20261030-122225`, then let the script produce the queries,
+   report and dashboard. npm needs a warmed headed-Chrome profile; if it is
+   still challenged the run stays failed, which is the correct record.
+2. **npm has two collection sources** — the analysis `latest_run` CTE now
+   excludes `npm_registry`, so only www.npmjs.com data counts. The manual
+   registry data from 2026-10-30 is still in the database and can be deleted if
+   a clean website-only history is wanted.
+3. **PyPI dependencies** — now collected from PEP 658 `.metadata` sidecars via
+   the wheel URL on each version page. Only wheel releases have sidecars; sdist-
+   only versions keep empty dependencies. A live pilot on 2026-10-31 collected
+   dependencies for two boto3 versions, so the path works.
+4. **Resolved dependency graph** — stored constraints are declared ranges, not
    an install graph.
-3. **PyPI dependencies** — blocked by robots.txt; decide whether metadata +
-   versions is acceptable or whether to ask the site owner.
-4. **Random-sample coverage** — reproducible per seed but not uniform:
+5. **Random-sample coverage** — reproducible per seed but not uniform:
    alphabetical indexes, sitemap letter ranges, search terms, and the NuGet /
-   crates.io pagination limits.
-5. **OSV freshness** — advisories are upserted, never deleted; rerun ingestion
+   crates.io pagination limits. RubyGems popular is capped at 100 by its stats
+   pages.
+6. **OSV freshness** — advisories are upserted, never deleted; rerun ingestion
    periodically and consider tracking withdrawn advisories.

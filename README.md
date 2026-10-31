@@ -18,8 +18,8 @@ Implemented ecosystems: **npm**, **PyPI**, **crates.io**, **RubyGems**, **NuGet*
 | `warehouse/middlewares.py` | Selenium downloader middleware and challenge handling |
 | `warehouse/spiders/base.py` | Shared spider request/error helpers |
 | `warehouse/spiders/npm.py` | npm website discovery, metadata, versions, dependencies |
-| `warehouse/spiders/npm_registry.py` | npm registry-API fallback for scale runs (metadata, versions, dependencies) |
-| `warehouse/spiders/pypi.py` | PyPI discovery, metadata, release history |
+| `warehouse/spiders/npm_registry.py` | Experimental registry-API collector; deliberately not used by the scale run or the collection policy |
+| `warehouse/spiders/pypi.py` | PyPI discovery, metadata, release history, PEP 658 dependencies |
 | `warehouse/spiders/rubygems.py` | RubyGems discovery, metadata, versions, dependencies |
 | `warehouse/spiders/crates.py` | crates.io SPA discovery, metadata, versions, dependencies |
 | `warehouse/spiders/hex.py` | Hex discovery, metadata, versions, dependencies |
@@ -50,19 +50,17 @@ set -a; source .env; set +a
 
 The database defaults to `postgresql://warehouse:warehouse@localhost:55432/warehouse`.
 
-`BROWSER_PROFILE_DIR` is worth setting to a persistent directory. The npm
-collector needs the browser profile that has already passed the site's bot
-check; a fresh profile is more likely to be challenged. `BROWSER_HEADLESS=false`
-is the default because headless Chrome is easier to fingerprint.
+`BROWSER_PROFILE_DIR` is worth setting to a persistent directory. It defaults to
+`~/.cache/hurtownie/chrome-profile`; that profile keeps the `cf_clearance`
+cookie between runs, which is what lets npm through. A fresh profile is more
+likely to be challenged. `BROWSER_HEADLESS=false` is the default because
+headless Chrome is easier to fingerprint.
 
 ## Running a collection
 
 ```bash
 # npm pilot: sample 25 popular and 5 random packages, 10 versions each
 .venv/bin/scrapy crawl npm
-
-# npm scale fallback through the official registry API (no browser)
-.venv/bin/scrapy crawl npm_registry
 
 # smaller pilot
 NPM_POPULAR_COUNT=4 NPM_RANDOM_COUNT=2 NPM_MAX_VERSIONS=3 \
@@ -100,7 +98,7 @@ on the next start.
 
 ## Scale run
 
-`scripts/scale_collection.sh` runs a moderate sample across all seven
+`scripts/scale_collection.sh` runs the full sample target across all seven
 ecosystems, then ingests OSV, matches versions, and writes a Markdown report and
 dashboard:
 
@@ -112,18 +110,27 @@ scripts/scale_collection.sh
 scripts/scale_status.sh                # progress of the newest run
 ```
 
-Defaults: 250 popular + 50 random packages per ecosystem, 5 sampled versions per
-package, sequential execution, and a per-ecosystem timeout (3 h HTTP, 6 h
-Selenium). Override the sample size with the usual `*_POPULAR_COUNT` /
-`*_RANDOM_COUNT` variables, or the timeouts with `SCALE_TIMEOUT_HTTP` /
-`SCALE_TIMEOUT_BROWSER`. RubyGems is the exception: its stats pages expose only
-the top 100 gems, so the script requests 100 popular + 50 random there.
+Defaults: 2,000 popular + 500 random packages per ecosystem, 5 sampled versions
+per package, 25 random index pages, sequential execution, and a per-ecosystem
+timeout (3 h HTTP, 6 h Selenium). npm is the exception: it has no timeout, so it
+can wait out a rate limit or challenge instead of being killed. Override the
+sample with `SCALE_POPULAR_COUNT` / `SCALE_RANDOM_COUNT`, the random index depth
+with `SCALE_RANDOM_PAGES`, or the other timeouts with `SCALE_TIMEOUT_HTTP` /
+`SCALE_TIMEOUT_BROWSER`. RubyGems is also capped: its stats pages expose only
+the top 100 gems, so the script requests 100 popular + 500 random there.
+
+The npm step always runs the website collector. It needs headed Chrome plus a
+warmed Cloudflare profile; if npm serves a challenge it is recorded as a
+`ChallengeBlocked` collection error rather than worked around. The registry-API
+spider remains in the tree for experiments but is not part of the collection
+policy and is never run by the orchestrator.
 
 The orchestrator is deliberately sequential. All Selenium ecosystems share one
 browser pool, and running them in parallel would mix rate-limit and challenge
 failures, making the blocking measurements meaningless. A failed or timed-out
 spider does not stop the run; its partial data is still processed and the exit
-code is recorded in `summary.tsv`.
+code is recorded in `summary.tsv`. A spider that exits 0 but stores no items is
+marked `failed` and skips OSV ingestion and matching for that ecosystem.
 
 To resume after an interruption without repeating finished ecosystems, point at
 the same output directory and list what is left:
@@ -131,6 +138,7 @@ the same output directory and list what is left:
 ```bash
 SCALE_RUN_DIR=output/scale-20261030-122225 \
 SCALE_ECOSYSTEMS="pypi packagist hex rubygems npm crates" \
+SCALE_POPULAR_COUNT=250 SCALE_RANDOM_COUNT=50 SCALE_RANDOM_PAGES=10 \
   scripts/scale_collection.sh
 ```
 
@@ -141,6 +149,18 @@ Version selection defaults to `spread`: the sampler takes the oldest, newest and
 evenly spaced releases. Taking only the most downloaded versions hides exactly
 the old versions advisories target. `NPM_VERSION_SELECTION=downloads` restores
 the old behaviour for comparison; the same setting exists per ecosystem.
+
+## Deployment
+
+A single Ubuntu VM on Azure can run PostgreSQL and the non-npm collectors. The
+step-by-step runbook, including quota checks, VM creation, bootstrap, the
+non-npm scale command, monitoring, backups and teardown, is in
+[`deploy/azure-vm.md`](deploy/azure-vm.md). `deploy/bootstrap.sh` installs
+Docker, Chrome and `uv` on the VM.
+
+npm stays on a residential connection because Cloudflare binds `cf_clearance`
+to the client IP. The runbook shows how to point a local npm run at the Azure
+database through an SSH tunnel.
 
 ## Vulnerabilities
 
@@ -211,10 +231,8 @@ package version. Affected ranges keep the advisory's own range rows, and
 
 - **npm popular**: search result pages sorted by monthly downloads, interleaved
   across queries so one query cannot fill the group. **Random**: short random
-  search terms, round-robin across queries, excluding popular packages. The
-  `npm_registry` spider provides the same groups through the official registry
-  search API and sorts candidates by reported monthly downloads; it records
-  `collection_method="registry_api"`.
+  search terms, round-robin across queries, excluding popular packages. Only
+  www.npmjs.com is used; the registry API is not part of the collection.
 - **PyPI popular**: the public top-pypi-packages dataset (monthly download
   ranking). **Random**: project sitemap shards chosen by seed.
 - **RubyGems popular**: the stats page (top gems by downloads). rubygems.org
@@ -245,18 +263,21 @@ pagination limits.
   answered with a "Client Challenge" interstitial. The browser layer waits for
   the interstitial to clear and records a `ChallengeBlocked` collection error
   when it does not. Packages that remain blocked are absent from the results.
-- **PyPI dependencies are not collected.** pypi.org does not render
-  per-release dependencies on the project page, and its JSON API is disallowed
-  by robots.txt. PyPI rows therefore contribute metadata and versions only.
+- **PyPI dependencies come from PEP 658 metadata sidecars.** PyPI does not
+  render `Requires-Dist` on project pages, and both `/simple/` and the JSON API
+  are robots-disallowed. For each sampled version the collector opens the
+  version page, takes the wheel URL from its file table, and requests
+  `<wheel-url>.metadata` from `files.pythonhosted.org`. That host publishes no
+  robots.txt, and the sidecar is the same metadata PyPI distributes to pip.
+  Versions that only have an sdist keep empty dependencies, because
+  `files.pythonhosted.org` does not serve `.metadata` for sdists.
 - **npm version list is partial on the website.** The versions tab renders about
   120 rows, not the full history. Sampling is therefore over the rendered
   window.
 - **npm website challenges.** www.npmjs.com sometimes serves a full-page
   Cloudflare managed challenge (“Just a moment…”). The browser layer waits and
-  records `ChallengeBlocked`; it does not bypass the challenge. For scale runs,
-  the `npm_registry` spider uses the official registry API instead and marks
-  those rows `collection_method="registry_api"`. The website collector remains
-  the primary scraping path and is still used for pilots.
+  records `ChallengeBlocked`; it does not bypass the challenge, and the registry
+  API is not used as a substitute.
 - **RubyGems dependencies are collected per selected version**, one extra page
   per version. Dependency pages list runtime and development dependencies;
   optionality is not exposed on the page and is stored as `false`.
@@ -280,9 +301,20 @@ pagination limits.
   loaded, `first_published_at` is left empty instead of reporting the oldest
   loaded release as the first one. Dependencies come from the version-specific
   dependencies page, which exposes runtime, build and dev kinds.
+- **npm rate limits.** The npm spiders pace themselves at 10 seconds per
+  request with one concurrent request per domain. On HTTP 429 the retry
+  middleware honours `Retry-After` when present; otherwise it backs off
+  exponentially from `NPM_RETRY_COOLDOWN_SECONDS` (default 600) up to
+  `NPM_RETRY_MAX_COOLDOWN_SECONDS` (default 3600), with jitter. By default it
+  never gives up: the request keeps waiting and retrying until the site lets it
+  back in. Set `NPM_RETRY_MAX_ATTEMPTS` or
+  `NPM_RETRY_MAX_TOTAL_COOLDOWN_SECONDS` to a positive value for a bounded run.
+  The sleep is sliced so Ctrl+C still stops the crawl. The orchestrator runs
+  one ecosystem at a time for the same reason.
 - **Rates and scale.** Concurrent requests per domain is 1 by default. The
   2,500-packages-per-ecosystem target is a goal, not a result; run a pilot,
-  measure, and adjust.
+  measure, and adjust. RubyGems cannot reach the popular target because its
+  stats pages stop at the top 100 gems.
 - A known advisory does not prove exploitation, and a dependency path does not
   prove that an application installs the vulnerable version.
 

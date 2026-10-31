@@ -7,7 +7,9 @@ services:
       POSTGRES_PASSWORD: warehouse
       POSTGRES_DB: warehouse
     ports:
-      - "55432:5432"
+      # Loopback only: on a cloud VM the database must not be reachable from
+      # the internet. Use an SSH tunnel when you need remote access.
+      - "127.0.0.1:55432:5432"
     volumes:
       - warehouse-pgdata:/var/lib/postgresql
     healthcheck:

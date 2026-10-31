@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import logging
-import os
+import random
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Any
 
 from scrapy import signals
@@ -17,8 +19,27 @@ from warehouse.browser import BrowserManager, BrowserOptions
 logger = logging.getLogger(__name__)
 
 RATE_LIMIT_STATUS = 429
-RATE_LIMIT_COOLDOWN_SECONDS = float(os.getenv("NPM_RETRY_COOLDOWN_SECONDS", "600") or 600)
-RATE_LIMIT_MAX_RETRIES = 10
+
+
+def _retry_after_seconds(response: Response) -> float | None:
+    """Read a ``Retry-After`` header in seconds or HTTP-date form."""
+    raw = response.headers.get(b"Retry-After")
+    if not raw:
+        return None
+    value = raw.decode("latin-1").strip()
+    if not value:
+        return None
+    try:
+        return max(0.0, float(value))
+    except ValueError:
+        pass
+    try:
+        moment = parsedate_to_datetime(value)
+    except (TypeError, ValueError):
+        return None
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return max(0.0, (moment - datetime.now(timezone.utc)).total_seconds())
 
 
 class NpmRateLimitRetryMiddleware(RetryMiddleware):
@@ -26,22 +47,85 @@ class NpmRateLimitRetryMiddleware(RetryMiddleware):
 
     npm answers crawlers with ``{"message":"Too Many Requests", ...}`` when a
     crawl gets chatty. Scrapy's default retry re-queues immediately, gives up
-    after RETRY_TIMES and lets the errbacks close the run; this subclass sleeps
-    a cool-down and keeps retrying while the crawler is being rate limited.
+    after RETRY_TIMES and lets the errbacks close the run; this subclass waits
+    out a cool-down and keeps retrying while the crawler is being rate limited.
+
+    The pause honours ``Retry-After`` when the server sends it. Otherwise it
+    backs off exponentially from ``NPM_RETRY_COOLDOWN_SECONDS`` up to
+    ``NPM_RETRY_MAX_COOLDOWN_SECONDS``, with 20% jitter so several workers do
+    not wake at the same instant.
+
+    By default the crawler never gives up on a rate-limited request: it keeps
+    sleeping and retrying until the site lets it back in. ``NPM_RETRY_MAX_ATTEMPTS``
+    and ``NPM_RETRY_MAX_TOTAL_COOLDOWN_SECONDS`` can impose a limit if a bounded
+    run is wanted instead.
     """
 
     def __init__(self, settings: Any) -> None:
         super().__init__(settings)
-        self._cool_down_pending = False
+        self.base_cooldown = float(
+            settings.getfloat("NPM_RETRY_COOLDOWN_SECONDS", 600.0)
+        )
+        self.max_cooldown = float(
+            settings.getfloat("NPM_RETRY_MAX_COOLDOWN_SECONDS", 3600.0)
+        )
+        self.rate_limit_attempts = int(
+            settings.getint("NPM_RETRY_MAX_ATTEMPTS", 0)
+        )
+        self.max_total_cooldown = float(
+            settings.getfloat("NPM_RETRY_MAX_TOTAL_COOLDOWN_SECONDS", 0.0)
+        )
+
+    def _backoff(self, attempts: int) -> float:
+        exponent = min(max(attempts - 1, 0), 8)
+        delay = min(self.base_cooldown * (2**exponent), self.max_cooldown)
+        return min(delay * random.uniform(0.8, 1.2), self.max_cooldown)
+
+    def _wait(self, delay: float) -> bool:
+        """Sleep in short slices so Ctrl+C and engine shutdown stay responsive."""
+        engine = getattr(getattr(self, "crawler", None), "engine", None)
+        if engine is None:
+            time.sleep(delay)
+            return True
+        deadline = time.monotonic() + delay
+        while time.monotonic() < deadline:
+            if not getattr(engine, "running", True):
+                return False
+            time.sleep(min(1.0, max(0.0, deadline - time.monotonic())))
+        return True
 
     def _retry(self, request: Request, reason: Any) -> Request | None:
-        if getattr(self, "_cool_down_pending", False):
-            self._cool_down_pending = False
+        if request.meta.pop("npm_rate_limit_pending", False):
+            attempts = int(request.meta.get("npm_rate_limit_attempts", 1))
+            budget = (
+                self.rate_limit_attempts
+                if self.rate_limit_attempts > 0
+                else 10**9
+            )
             request.meta["max_retry_times"] = max(
                 int(request.meta.get("max_retry_times") or self.max_retry_times),
-                RATE_LIMIT_MAX_RETRIES,
+                budget,
             )
-            time.sleep(RATE_LIMIT_COOLDOWN_SECONDS)
+            delay = request.meta.pop("npm_retry_after", None)
+            if delay is None:
+                delay = self._backoff(attempts)
+            spent = float(request.meta.get("npm_rate_limit_total_sleep", 0.0))
+            if self.max_total_cooldown > 0 and spent + delay > self.max_total_cooldown:
+                logger.error(
+                    "HTTP 429 on %s; giving up after %.0f s of cool-down",
+                    request.url,
+                    spent,
+                )
+                return None
+            request.meta["npm_rate_limit_total_sleep"] = spent + delay
+            logger.warning(
+                "HTTP 429 on %s; cooling down for %.0f s (attempt %d)",
+                request.url,
+                delay,
+                attempts,
+            )
+            if not self._wait(delay):
+                return None
         return super()._retry(request, reason)
 
     def process_response(self, request: Request, response: Response, spider: Any) -> Any:
@@ -49,8 +133,16 @@ class NpmRateLimitRetryMiddleware(RetryMiddleware):
             response.status == RATE_LIMIT_STATUS
             and not request.meta.get("dont_retry", False)
         ):
-            # Rate limited: arm the cool-down; the retry will pause first.
-            self._cool_down_pending = True
+            # Rate limited: mark this request so the retry pauses first.
+            request.meta["npm_rate_limit_pending"] = True
+            request.meta["npm_rate_limit_attempts"] = (
+                int(request.meta.get("npm_rate_limit_attempts", 0)) + 1
+            )
+            retry_after = _retry_after_seconds(response)
+            if retry_after is not None:
+                request.meta["npm_retry_after"] = min(
+                    retry_after, self.max_cooldown
+                )
         return super().process_response(request, response, spider)
 
 

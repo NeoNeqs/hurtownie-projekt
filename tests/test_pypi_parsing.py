@@ -9,8 +9,10 @@ from warehouse.spiders.pypi import (
     package_name_from_url,
     parse_project_page,
     parse_release_history,
+    parse_requires_dist,
     parse_sitemap_locations,
     parse_top_packages,
+    parse_wheel_url,
     sitemap_project_names,
 )
 
@@ -104,6 +106,67 @@ def test_package_name_from_url_strips_release_segments() -> None:
     assert package_name_from_url("https://pypi.org/project/requests/") == "requests"
     assert package_name_from_url("https://pypi.org/project/requests/2.34.2/") == "requests"
     assert package_name_from_url("https://pypi.org/search/?q=x") is None
+
+
+def test_parse_wheel_url_prefers_a_wheel_over_the_sdist() -> None:
+    body = b"""
+    <html><body>
+      <table class="table table--files">
+        <tbody>
+          <tr><td><a href="https://files.pythonhosted.org/packages/x/requests-2.0.tar.gz">sdist</a></td></tr>
+          <tr><td><a href="https://files.pythonhosted.org/packages/x/requests-2.0-py3-none-any.whl">wheel</a></td></tr>
+        </tbody>
+      </table>
+    </body></html>
+    """
+    response = HtmlResponse(
+        url="https://pypi.org/project/requests/2.0/#files", body=body, encoding="utf-8"
+    )
+
+    assert parse_wheel_url(response) == (
+        "https://files.pythonhosted.org/packages/x/requests-2.0-py3-none-any.whl"
+    )
+
+
+def test_parse_wheel_url_returns_none_for_sdist_only_release() -> None:
+    body = b"""
+    <html><body>
+      <table class="table table--files">
+        <tbody>
+          <tr><td><a href="https://files.pythonhosted.org/packages/x/requests-2.0.tar.gz">sdist</a></td></tr>
+        </tbody>
+      </table>
+    </body></html>
+    """
+    response = HtmlResponse(
+        url="https://pypi.org/project/requests/2.0/#files", body=body, encoding="utf-8"
+    )
+
+    assert parse_wheel_url(response) is None
+
+
+def test_parse_requires_dist_reads_runtime_and_extra_dependencies() -> None:
+    payload = """Metadata-Version: 2.4
+Name: requests
+Requires-Dist: charset_normalizer<4,>=2
+Requires-Dist: PySocks!=1.5.7,>=1.5.6; extra == "socks"
+Requires-Dist: not a requirement ???
+"""
+
+    assert parse_requires_dist(payload) == [
+        {
+            "name": "charset_normalizer",
+            "constraint": "<4,>=2",
+            "dependency_type": "runtime",
+            "optional": False,
+        },
+        {
+            "name": "PySocks",
+            "constraint": "!=1.5.7,>=1.5.6",
+            "dependency_type": "optional",
+            "optional": True,
+        },
+    ]
 
 
 def test_parse_top_packages_sorts_by_downloads() -> None:
